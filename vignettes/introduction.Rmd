@@ -1,0 +1,19 @@
+---
+title: "Utilidades 3F"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Utilidades 3F}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(utilidades3F)
+```
