@@ -19,11 +19,11 @@ obtener_capa <- function(nombre_de_capa){
                     typename = nombre_de_capa,
                     outputFormat="json"
   )
-  request <- build_url(url)
+  request <- httr::build_url(url)
 
   # Descargar capa
   print(paste0("Descargando '", nombre_de_capa, "' del URL: '", request, "'"))
-  capa <- st_transform(read_sf(request), 4326)
+  capa <- sf::st_transform(sf::read_sf(request), 4326)
 
   return(capa)
 

@@ -4,8 +4,8 @@ DOMAIN_URL <- 'http://localhost:8080'
 
 
 request_requests_json <- function(url_prefix, params) {
-  res <- GET(url_prefix, query = params)
-  content(res, type = "application/json")
+  res <- httr::GET(url_prefix, query = params)
+  httr::content(res, type = "application/json")
   # content(res, as = "text") %>%
   # fromJSON(flatten = TRUE)
 }
