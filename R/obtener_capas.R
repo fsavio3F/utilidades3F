@@ -36,7 +36,7 @@ obtener_capa <- function(nombre_de_capa){
 #' @export
 
 inventario_capas <- function(wfs = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows", service_version = "1.1.0", pretty_output = TRUE) {
-  client <- WFSClient$new(wfs, serviceVersion = service_version)
+  client <- ows4R::WFSClient$new(wfs, serviceVersion = service_version)
   capas <- client$getFeatureTypes(pretty = pretty_output)
   return(capas)
 }
