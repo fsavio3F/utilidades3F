@@ -10,6 +10,6 @@ localidades_oc <- dplyr::rename(dplyr::select(obtener_capa("localidades"),c(3,5)
 #' @export
 
 normalizar_localidades <- function(df = NULL, localidades = localidades_oc){
-sf::st_join(df,localidades, join = st_within)
+sf::st_join(df,localidades, join = sf::st_within)
 }
 
