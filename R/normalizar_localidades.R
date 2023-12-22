@@ -1,5 +1,5 @@
 localidades_oc <- dplyr::select(obtener_capa("localidades"),c(3,5)) %>%
-  rename(localidad_normalizada = nombre)
+  dplyr::rename(localidad_normalizada = nombre)
 #' obtener_capa
 #'
 #' geolocalizar direcciónes dentro de una base de datos
@@ -13,3 +13,4 @@ localidades_oc <- dplyr::select(obtener_capa("localidades"),c(3,5)) %>%
 normalizar_localidades <- function(df = NULL, localidades = localidades_oc){
 st_join(df,localidades, join = st_within)
 }
+

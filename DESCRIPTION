@@ -8,9 +8,7 @@ Description: Este paquete contiene distintas funciones de uso frecuente dentro d
 License: 
 Encoding: UTF-8
 LazyData: true
-Depends: httr, jsonlite, purrr
 VignetteBuilder: knitr
-Suggests: knitr, rmarkdown
 RoxygenNote: 7.2.3
 Collate: 
     'obtener_capas.R'
