@@ -1,7 +1,4 @@
-library(httr)
-library(jsonlite)
-library(dplyr)
-library(purrr)
+
 
 DOMAIN_URL <- 'http://localhost:8080'
 

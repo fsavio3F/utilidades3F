@@ -1,0 +1,43 @@
+#' obtener_capa
+#'
+#' geolocalizar direcciónes dentro de una base de datos
+#' @param nombre_de_capa nombre de la capa a descargar
+#' @return devuelve la capa deseada, en caso de no conocer el nombre utilizar la función de inventario_capas()
+#' @examples
+#' capa <- obtener_capa(nombre_de_capa = "localidades");
+#' @export
+obtener_capa <- function(nombre_de_capa){
+
+  # URL del servicio del GeoPortal
+  wfs_3f <- "https://geoportal.tresdefebrero.gob.ar/geoserver/ows"
+
+  # Construir la consulta usando el nombre de la capa requerida
+  url <- httr::parse_url(wfs_3f)
+  url$query <- list(service = "wfs",
+                    version = "1.1.0",
+                    request = "GetFeature",
+                    typename = nombre_de_capa,
+                    outputFormat="json"
+  )
+  request <- build_url(url)
+
+  # Descargar capa
+  print(paste0("Descargando '", nombre_de_capa, "' del URL: '", request, "'"))
+  capa <- st_transform(read_sf(request), 4326)
+
+  return(capa)
+
+}
+
+#' inventario_capas
+#'
+#' geolocalizar direcciónes dentro de una base de datos
+#' @return devuelve las capas disponibles
+#' @export
+
+inventario_capas <- function(wfs = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows", service_version = "1.1.0", pretty_output = TRUE) {
+  client <- WFSClient$new(wfs, serviceVersion = service_version)
+  capas <- client$getFeatureTypes(pretty = pretty_output)
+  return(capas)
+}
+
