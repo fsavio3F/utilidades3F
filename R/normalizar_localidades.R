@@ -1,5 +1,4 @@
-localidades_oc <- dplyr::select(obtener_capa("localidades"),c(3,5)) %>%
-  dplyr::rename(localidad_normalizada = nombre)
+localidades_oc <- dplyr::rename(dplyr::select(obtener_capa("localidades"),c(3,5)),localidad_normalizada = nombre)
 #' obtener_capa
 #'
 #' geolocalizar direcciónes dentro de una base de datos
