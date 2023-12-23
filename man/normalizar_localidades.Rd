@@ -12,7 +12,7 @@ normalizar_localidades(df = NULL, localidades = localidades_oc)
 \item{localidades}{description}
 }
 \value{
-devuelve la capa deseada, en caso de no conocer el nombre utilizar la función de inventario_capas()
+devuelve la capa deseada, en caso de no conocer el nombre utilizar la función de inventario_capas
 }
 \description{
 geolocalizar direcciónes dentro de una base de datos
