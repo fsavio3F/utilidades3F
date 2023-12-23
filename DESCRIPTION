@@ -5,10 +5,9 @@ Version: 0.1.0
 Author: Federico Savio
 Maintainer: Federico savio <yourself@somewhere.net>
 Description: Este paquete contiene distintas funciones de uso frecuente dentro del Departamento de Datos de la Municipalidad de Tres de Febrero 
-License: 
+License: UWU
 Encoding: UTF-8
 LazyData: true
-VignetteBuilder: knitr
 RoxygenNote: 7.2.3
 Collate: 
     'obtener_capas.R'
