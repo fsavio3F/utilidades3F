@@ -23,8 +23,8 @@ obtener_capa <- function(nombre_de_capa){
 
   # Descargar capa
   print(paste0("Descargando '", nombre_de_capa, "' del URL: '", request, "'"))
-  capa <-sf::read_sf(request)
-  sf::st_crs(capa) <- 4326
+  capa <- sf::read_sf(request)
+  sf::st_crs(capa,"4326")
 
   return(capa)
 
