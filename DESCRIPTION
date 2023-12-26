@@ -3,7 +3,7 @@ Type: Package
 Title: Funciones útiles para 3F(utilidades3F)
 Version: 0.1.0
 Author: Federico Savio
-Maintainer: Federico savio <yourself@somewhere.net>
+Maintainer: Federico savio <fsavio.3f@gmail.com>
 Description: Este paquete contiene distintas funciones de uso frecuente dentro del Departamento de Datos de la Municipalidad de Tres de Febrero 
 License: UWU
 Encoding: UTF-8
