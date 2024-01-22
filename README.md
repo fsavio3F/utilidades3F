@@ -18,7 +18,7 @@ Utilidades3F tiene como objetivoc centralziar un conjunto de funciones de uso fr
 
 # **Funciones disponibles**
 
-* **inventario_cpas()**: Nos permite obtener un listado de las capas públicas disponibles en el [geoportal municipal](https://geoportal.tresdefebrero.gob.ar/).
+* **inventario_capas()**: Nos permite obtener un listado de las capas públicas disponibles en el [geoportal municipal](https://geoportal.tresdefebrero.gob.ar/).
 
 * **obtener_capa()**: Nos permite obtener una capa pública del [geoportal municipal](https://geoportal.tresdefebrero.gob.ar/) utilizando el nombre salido de la función *inventario_capas()*.
 
