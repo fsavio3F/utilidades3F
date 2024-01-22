@@ -10,7 +10,7 @@ request_requests_json <- function(url_prefix, params) {
   # fromJSON(flatten = TRUE)
 }
 
-get_coordinates_url <- function(country = NULL, state = NULL, city = NULL,
+obtener_coordenadas_url <- function(country = NULL, state = NULL, city = NULL,
                                 street = NULL, postalcode = NULL, addressdetails = NULL) {
   params <- list()
   if (!is.null(country)) params$country <- country
@@ -26,9 +26,9 @@ get_coordinates_url <- function(country = NULL, state = NULL, city = NULL,
   return(list(url_prefix = url_prefix, params = params))
 }
 
-get_coordinates <- function(country = NULL, state = NULL, city = NULL,
+obtener_coordenadas <- function(country = NULL, state = NULL, city = NULL,
                             street = NULL, postalcode = NULL) {
-  url <- get_coordinates_url(country, state, city, street, postalcode)
+  url <- obtener_coordenadas_url(country, state, city, street, postalcode)
   coordinates <- request_requests_json(url=url$url_prefix, params = url$params)
   tryCatch(
     coordinates[[1]],
@@ -38,7 +38,7 @@ get_coordinates <- function(country = NULL, state = NULL, city = NULL,
 }
 
 
-#' geocode_df
+#' geocodificar_df
 #'
 #' geolocalizar direcciónes dentro de una base de datos
 #' @param df base de datos
@@ -55,10 +55,10 @@ get_coordinates <- function(country = NULL, state = NULL, city = NULL,
 #' @param street_number_col columna que contenga la altura
 #' @return Devuelve la latitud y longitud expresada en EPSG 4326 además del código postal y la dirección normalizada
 #' @examples
-#' geolocalizado <- geocode_df(df, country_col = 'PAIS', city = 'Tres de Febrero', state = 'Buenos AIres', full_address_col = 'direccion_completa');
+#' geolocalizado <- geocodificar_df(df, country_col = 'PAIS', city = 'Tres de Febrero', state = 'Buenos AIres', full_address_col = 'direccion_completa');
 #' @export
 
-geocode_df <- function(df, country = NULL, country_col = NULL, state = NULL, state_col = NULL, city = NULL, city_col = NULL,
+geocodificar_df <- function(df, country = NULL, country_col = NULL, state = NULL, state_col = NULL, city = NULL, city_col = NULL,
                        postalcode = NULL, postalcode_col = NULL, full_address_col = NULL, street_name_col = NULL,
                        street_number_col = NULL) {
 
@@ -101,7 +101,7 @@ geocode_df <- function(df, country = NULL, country_col = NULL, state = NULL, sta
       street <- paste(df[idx, street_name_col], df[idx, street_number_col])
     }
 
-    data <- get_coordinates(
+    data <- obtener_coordenadas(
       country = if (is.null(country_col)) country else df[idx, country_col],
       state = if (is.null(state_col)) state else df[idx, state_col],
       city = if (is.null(city_col)) city else df[idx, city_col],
