@@ -17,7 +17,7 @@ ARBA <- function(nombre_de_capa){
   dir <- "ARBA"
   dir.create(dir)
   url <- paste(url_base,df$codigo_agregacion[df$agregacion == nombre_de_capa],"/",sep = "")
-  response <- httr::GET(url, httr::write_disk(gz_file, overwrite = TRUE))
+  response <- httr::GET(url, httr::write_disk(paste(dir,gz_file, sep = "/"), overwrite = TRUE))
   
   # Descargar capa
   untar(gz_file, exdir = dir)
@@ -27,7 +27,8 @@ ARBA <- function(nombre_de_capa){
   sf::write_sf(capa_prov, paste(dir,"/",nombre_de_capa,".geojson",sep = ""), delete_dsn = TRUE)
   capa <- sf::read_sf(paste(dir,"/",nombre_de_capa,".geojson",sep = ""))
   cod_agr <- df$codigo_agregacion[df$agregacion == nombre_de_capa]
-  unlink(c(paste(dir,"/",cod_agr,".shp",sep = ""),
+  unlink(c(paste(dir,gz_file),
+           paste(dir,"/",cod_agr,".shp",sep = ""),
            paste(dir,"/",cod_agr,".shx",sep = ""),
            paste(dir,"/",cod_agr,".prj",sep = ""),
            paste(dir,"/",cod_agr,".dbf",sep = ""),
