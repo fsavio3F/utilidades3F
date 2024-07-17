@@ -27,7 +27,7 @@ ARBA <- function(nombre_de_capa){
   sf::write_sf(capa_prov, paste(dir,"/",nombre_de_capa,".geojson",sep = ""), delete_dsn = TRUE)
   capa <- sf::read_sf(paste(dir,"/",nombre_de_capa,".geojson",sep = ""))
   cod_agr <- df$codigo_agregacion[df$agregacion == nombre_de_capa]
-  unlink(c(paste(dir,gz_file),
+  unlink(c(paste(dir,"/",gz_file, sep = ""),
            paste(dir,"/",cod_agr,".shp",sep = ""),
            paste(dir,"/",cod_agr,".shx",sep = ""),
            paste(dir,"/",cod_agr,".prj",sep = ""),
