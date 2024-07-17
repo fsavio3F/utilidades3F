@@ -8,11 +8,12 @@ Description: Este paquete contiene distintas funciones de uso frecuente dentro d
 License: UWU
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.2
 Collate: 
     'obtener_capas.R'
     'geolocalizar.R'
     'normalizar_localidades.R'
+    'ARBA.R'
 Imports:
     sf,
     ows4R,
