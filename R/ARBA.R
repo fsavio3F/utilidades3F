@@ -52,7 +52,7 @@ ARBA_inventario<- function() {
                    "Las plantas urbanas y suburbanas se dividirán en secciones llevando sus límites por calles, si es posible principales o avenidas y a falta de calles por un deslinde inconfundible de propiedad, no debiendo contener en general cada sección urbana un número mayor de cien manzanas.",
                    "Extensión de territorio cuya superficie no debe exceder las 1.5 hectáreas y están totalmente rodeadas de vías de comunicación.")
   inventario <- data.frame(nombre_capa,descripcion)
-  return(invetnario)
+  return(inventario)
 }
 
 
