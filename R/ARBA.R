@@ -20,7 +20,7 @@ ARBA <- function(nombre_de_capa){
   response <- httr::GET(url, httr::write_disk(paste(dir,gz_file, sep = "/"), overwrite = TRUE))
   
   # Descargar capa
-  untar(gz_file, exdir = dir)
+  untar(paste(dir, gz_file, sep="/"), exdir = dir)
   shapefile_path <- list.files(dir, pattern = "\\.shp$", full.names = TRUE)
   print(paste0("Descargando '", nombre_de_capa, "' del URL: '", url, "'"))
   capa_prov <- sf::read_sf(shapefile_path)
