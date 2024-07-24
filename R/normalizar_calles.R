@@ -11,7 +11,7 @@ diccionario_calles <- obtener_capa("relevamiento_callejero") |>
 tokens_similitud <- function(nombre_org, nombres_normalizados) {
   # tokenizacion de nombres originales
   nombre_org <- stringi::stri_trans_general(tolower(nombre_org),"Latin-ASCII")
-  tokens_org <- unlist(stringi::str_split(nombre_org, " "))
+  tokens_org <- unlist(stringr::str_split(nombre_org, " "))
   
   # asignacion de puntaje
   mejor_empareja <- ""
@@ -20,7 +20,7 @@ tokens_similitud <- function(nombre_org, nombres_normalizados) {
   # revision de nombres normalizados
   for (nombre_norm in nombres_normalizados) {
     # tokenizacion de nombres correctos
-    token_norm <- unlist(stringi::str_split(nombre_norm, " "))
+    token_norm <- unlist(stringr::str_split(nombre_norm, " "))
     
     # encontrar token compartidos entre los nombres originales y normalizados
     tokens_comunes <- intersect(tolower(tokens_org), tolower(token_norm))
