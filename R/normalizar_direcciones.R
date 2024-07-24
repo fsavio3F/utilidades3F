@@ -1,9 +1,9 @@
-diccionario_calles <- obtener_capa("relevamiento_callejero") %>% 
-  sf::st_drop_geometry() %>% 
-  dplyr::mutate(nombre_simp = stringi::stri_trans_general(tolower(nombre_cal),"Latin-ASCII")) %>%
-  dplyr::select(nombre_simp, nombre_cal) %>%
-  group_by(nombre_simp) %>%
-  summarise(nombre_cal = first(nombre_cal))
+diccionario_calles <- obtener_capa("relevamiento_callejero") |> 
+  sf::st_drop_geometry() |> 
+  dplyr::mutate(nombre_simp = stringi::stri_trans_general(tolower(nombre_cal),"Latin-ASCII")) |>
+  dplyr::select(nombre_simp, nombre_cal) |>
+  dplyr::group_by(nombre_simp) |>
+  dplyr::summarise(nombre_cal = dplyr::first(nombre_cal))
 
 
 
@@ -49,8 +49,8 @@ tokens_similitud <- function(nombre_org, nombres_normalizados) {
 #' @export
 
 normalizar_calles <- function(df, nombre_calles) {
-  df <- df %>% 
-    rowwise() %>% 
+  df <- df |>
+    rowwise()|>
     dplyr::mutate(nombre_normalizado = tokens_similitud(!!sym(nombre_calles), diccionario_calles$nombre_simp))
   return(df)
 }  
