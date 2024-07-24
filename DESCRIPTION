@@ -14,7 +14,7 @@ Collate:
     'geolocalizar.R'
     'normalizar_localidades.R'
     'ARBA.R'
-	'normalizar_calles.r'
+    'normalizar_calles.r'
 Imports:
     sf,
     ows4R,
