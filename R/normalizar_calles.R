@@ -51,6 +51,6 @@ tokens_similitud <- function(nombre_org, nombres_normalizados) {
 normalizar_calles <- function(df, nombre_calles) {
   df <- df |>
     dplyr::rowwise()|>
-    dplyr::mutate(nombre_normalizado = tokens_similitud(!!sym(nombre_calles), diccionario_calles$nombre_simp))
+    dplyr::mutate(nombre_normalizado = tokens_similitud(!!dplyr::sym(nombre_calles), diccionario_calles$nombre_simp))
   return(df)
 }  
