@@ -17,7 +17,7 @@ tokens_similitud <- function(nombre_org, nombres_normalizados) {
   
   # asignación de puntaje
   mejor_empareja <- ""
-  mejor_puntaje <- Inf
+  mejor_puntaje <- -1
   
   # revisión de nombres normalizados
   for (nombre_norm in nombres_normalizados) {
@@ -50,7 +50,7 @@ tokens_similitud <- function(nombre_org, nombres_normalizados) {
 
 #' normalizar_calles
 #'
-#' geolocalizar direcciónes dentro de una base de datos
+#' Permite normalizar los nombres de calles de una base de datos para el municipio de Tres de Febrero
 #' @param df base de datos
 #' @param nombre_calles columna que contenga los nombres de calles
 #' @return devuelve la base de datos con una columna adicional con los nombres de calles normalizados

@@ -53,7 +53,7 @@ obtener_direccion_url <- function(lat = NULL, lon = NULL) {
 
 #' geocodificar_df
 #'
-#' geolocalizar direcciónes dentro de una base de datos
+#' Permite obtener las coordenadas a partir de las direcciones contenidas en un conjunto de datos
 #' @param df base de datos
 #' @param country cadena que contenga el país
 #' @param country_col columna de país en caso de que este varíe

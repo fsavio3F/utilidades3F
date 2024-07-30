@@ -1,6 +1,5 @@
 #' ARBA
 #'
-#' geolocalizar direcciónes dentro de una base de datos
 #' @param nombre_de_capa nombre de la capa a descargar
 #' @return devuelve la capa deseada, en caso de no conocer el nombre utilizar la función de ARBA_inventario()
 #' @examples
@@ -39,7 +38,7 @@ ARBA <- function(nombre_de_capa){
 
 #' ARBA_inventario
 #'
-#' @return devuelve las capas disponibles
+#' @return devuelve un listado de las capa disponibles para descargar de los geoservicios de ARBA
 #' @export
 
 ARBA_inventario<- function() {

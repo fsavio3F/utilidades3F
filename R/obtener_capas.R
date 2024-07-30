@@ -1,6 +1,6 @@
 #' obtener_capa
 #'
-#' geolocalizar direcciónes dentro de una base de datos
+#' Permite descargar una capa del geoportal municipal ingresando su nombre
 #' @param nombre_de_capa nombre de la capa a descargar
 #' @return devuelve la capa deseada, en caso de no conocer el nombre utilizar la función de inventario_capas()
 #' @examples
@@ -32,7 +32,7 @@ obtener_capa <- function(nombre_de_capa){
 
 #' inventario_capas
 #'
-#' geolocalizar direcciónes dentro de una base de datos
+#' Nos devuelve un listado de las capas disponibles en el geoportal municipal
 #' @return devuelve las capas disponibles
 #' @export
 

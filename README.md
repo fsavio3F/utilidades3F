@@ -24,17 +24,17 @@ Utilidades3F tiene como objetivo centralizar un conjunto de funciones de uso fre
 
 * **geocodificar_df()**: Nos permite obtener las coordenadas, dirección normalizada, y código postal para un  conjunto de datos del cual dispongamos la calle y la altura utilizando los servicios de nominatim. **¹**
 
-* **normalizar_localidades()**: Nos permite normalizar los nombres de las localidades del partido de Tres de Febrero mediante la unión espacial de los [polígonos de las localidades disponibles en el geoportal municipal](https://geoportal.tresdefebrero.gob.ar/layers/geonode_data:geonode:localidades) basandonos en la ordenanza [Nº 2096](https://geoportal.tresdefebrero.gob.ar/documents/807).
+* **normalizar_localidades()**: Nos permite normalizar los nombres de las localidades del partido de Tres de Febrero mediante la unión espacial de los [polígonos de las localidades disponibles en el geoportal municipal](https://geoportal.tresdefebrero.gob.ar/layers/geonode_data:geonode:localidades) basándonos en la ordenanza [Nº 2096](https://geoportal.tresdefebrero.gob.ar/documents/807).
   
 * **normalizar_calles()**: Nos permite normalizar los nombres de las calles en base a la información disponible del censo de calles.
 
 * **ARBA_inventario()**: Nos permite obtener una descripción de las capas geográficas de ARBA disponibles mediante [geoarba](https://www.arba.gov.ar/geoarba/inicio.asp) para el municipio de Tres de Febrero.
 
-* **ARBA()**: Nos permite consultar las capas geografícas de ARBA ingresando el nombre de la capa de interes.
+* **ARBA()**: Nos permite consultar las capas geográficas de ARBA ingresando el nombre de la capa de interes.
 
 # **Requisitos**
 
-Para instalar el paquete de utilidades3F es necesario primero contar con la librerría de devtools en R la cual contiene la función *install_github()* que nos permite instalar paquetes de R almacenados en github.
+Para instalar el paquete de utilidades3F es necesario primero contar con la librería de devtools en R la cual contiene la función *install_github()* que nos permite instalar paquetes de R almacenados en github.
 
 ```sh
 install.packages("devtools")
