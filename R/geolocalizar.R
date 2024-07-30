@@ -38,6 +38,19 @@ obtener_coordenadas <- function(country = NULL, state = NULL, city = NULL,
 }
 
 
+obtener_direccion_url <- function(lat = NULL, lon = NULL) {
+  params <- list()
+  if (!is.null(lat)) params$lat <- lat
+  if (!is.null(lon)) params$lon <- lon
+  params$format <- 'json'
+  
+  url_prefix <- paste0(DOMAIN_URL, '/reverse?')
+  
+  return(list(url_prefix = url_prefix, params = params))
+}
+
+
+
 #' geocodificar_df
 #'
 #' geolocalizar direcciónes dentro de una base de datos

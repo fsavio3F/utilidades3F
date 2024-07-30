@@ -18,5 +18,5 @@ devuelve la base de datos con una columna adicional con los nombres de calles no
 geolocalizar direcciónes dentro de una base de datos
 }
 \examples{
-nombre_normalizados <- normalizar_calles(df, nombre_calles = "calle_nom");
+nombre_normalizados <- normalizar_calles(df, nombre_calles = "calle_nombre");
 }
