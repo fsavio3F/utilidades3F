@@ -13,7 +13,7 @@ ARBA(nombre_de_capa)
 devuelve la capa deseada, en caso de no conocer el nombre utilizar la función de ARBA_inventario()
 }
 \description{
-geolocalizar direcciónes dentro de una base de datos
+ARBA
 }
 \examples{
 capa <- ARBA(nombre_de_capa = "Parcela");

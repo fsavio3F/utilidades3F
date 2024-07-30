@@ -7,7 +7,7 @@
 ARBA_inventario()
 }
 \value{
-devuelve las capas disponibles
+devuelve un listado de las capa disponibles para descargar de los geoservicios de ARBA
 }
 \description{
 ARBA_inventario

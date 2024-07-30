@@ -48,7 +48,7 @@ geocodificar_df(
 Devuelve la latitud y longitud expresada en EPSG 4326 además del código postal y la dirección normalizada
 }
 \description{
-geolocalizar direcciónes dentro de una base de datos
+Permite obtener las coordenadas a partir de las direcciones contenidas en un conjunto de datos
 }
 \examples{
 geolocalizado <- geocodificar_df(df, country_col = 'PAIS', city = 'Tres de Febrero', state = 'Buenos AIres', full_address_col = 'direccion_completa');

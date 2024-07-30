@@ -14,5 +14,5 @@ inventario_capas(
 devuelve las capas disponibles
 }
 \description{
-geolocalizar direcciónes dentro de una base de datos
+Nos devuelve un listado de las capas disponibles en el geoportal municipal
 }

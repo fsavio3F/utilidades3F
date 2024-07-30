@@ -13,7 +13,7 @@ obtener_capa(nombre_de_capa)
 devuelve la capa deseada, en caso de no conocer el nombre utilizar la función de inventario_capas()
 }
 \description{
-geolocalizar direcciónes dentro de una base de datos
+Permite descargar una capa del geoportal municipal ingresando su nombre
 }
 \examples{
 capa <- obtener_capa(nombre_de_capa = "localidades");
