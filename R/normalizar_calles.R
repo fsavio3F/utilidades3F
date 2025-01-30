@@ -1,9 +1,10 @@
-diccionario_calles <- obtener_capa("callejero_normalizado") |> 
+diccionario_calles <- utilidades3F::obtener_capa("callejero_normalizado") |> 
   sf::st_drop_geometry() |> 
   dplyr::mutate(nombre_simp = stringi::stri_trans_general(tolower(nombre_cal),"Latin-ASCII")) |>
   dplyr::select(nombre_simp, nombre_cal) |>
   dplyr::group_by(nombre_simp) |>
-  dplyr::summarise(nombre_cal = dplyr::first(nombre_cal))
+  dplyr::summarise(nombre_cal = dplyr::first(nombre_cal)) |>
+  dplyr::filter(!is.na(nombre_cal))
 
 
 
@@ -34,6 +35,8 @@ tokens_similitud <- function(nombre_org, nombres_normalizados) {
       mejor_puntaje <- puntaje
     }
   }
+  print(mejor_puntaje)
+  
   return(mejor_empareja)
 }
 
