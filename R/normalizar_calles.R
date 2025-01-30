@@ -6,31 +6,67 @@ diccionario_calles <- obtener_capa("callejero_normalizado") |>
   dplyr::summarise(nombre_cal = dplyr::first(nombre_cal))
 
 
+diccionario_calles<- diccionario_calles %>%  filter(!is.na(diccionario_calles$nombre_simp) & diccionario_calles$nombre_simp!="")
 
 # tokenizacion y emparejamiento
-tokens_similitud <- function(nombre_org, nombres_normalizados) {
+tokens_similitud <- function(nombre_org, nombres_normalizados){
   # tokenizacion de nombres originales
+  
+  
+  nombres_comunes <- c("general paz", "lacroze", "zavatarro", "j.b. justo", "ruta 8", "perez galdos", 
+                       "wernicke", "cafferata", "lincol", "gral lavalle", "padre elizalde")
+  nombres_reales <- c("avenida general jose maria paz","federico lacroze","pedro jose luis zavatarro","avenida juan b justo",
+                      "avenida eva duarte de peron","benito perez galdos","german wernicke","agustin cafferata", "abraham lincoln",
+                      "general juan galo lavalle", "padre agustin gabriel bonney elizalde")
+  
+  nombres_coloquiales <- data.frame(nombres_comunes = nombres_comunes, nombres_reales = nombres_reales)
+  rm(nombres_comunes, nombres_reales)
+  
+  nombres_normalizados <- c(nombres_normalizados, nombres_coloquiales$nombres_comunes)
+  
   nombre_org <- stringi::stri_trans_general(tolower(nombre_org),"Latin-ASCII")
+  nombre_org <- gsub("\\.", "", nombre_org)
+  
+  nombre_org <- gsub("\\.", "", nombre_org)
+  nombre_org <- gsub("pte ", "presidente ", nombre_org)
+  nombre_org <- gsub("av ", "avenida ", nombre_org)
+  nombre_org <- gsub("gral ", "general ", nombre_org)
+  nombre_org <- gsub("pres ", "presidente ", nombre_org)
   tokens_org <- unlist(stringr::str_split(nombre_org, " "))
   
-  # asignacion de puntaje
+  print(tokens_org)
+  
+  
+  #asignación de puntaje
   mejor_empareja <- ""
   mejor_puntaje <- -1
   
-  # revision de nombres normalizados
-  for (nombre_norm in nombres_normalizados) {
+  # revisión de nombres normalizados
+  for (nombre_norm in 1:length(nombres_normalizados)) {
     # tokenizacion de nombres correctos
-    token_norm <- unlist(stringr::str_split(nombre_norm, " "))
+    token_norm <- unlist(stringr::str_split(nombres_normalizados[nombre_norm], " "))
     
     # encontrar token compartidos entre los nombres originales y normalizados
-    tokens_comunes <- intersect(tolower(tokens_org), tolower(token_norm))
+    tokens_en_comun <- intersect(tolower(tokens_org), tolower(token_norm))
     
     # calculo de similitud
-    puntaje <- length(tokens_comunes) / length(token_norm)
+    puntaje_tokens <-  length(tokens_en_comun) / (length(token_norm))
     
-    # actualizacion de mejor emparejamiento
+    # Cálculo de similitud basado en distancia de cadena (Levenshtein)
+    
+    distancia <- stringdist::stringdist(nombre_org, nombres_normalizados[nombre_norm], method = "lv")
+    puntaje_distancia <- 1/(1+distancia)
+    
+    nombres_normalizados[nombre_norm] <- ifelse(nombres_normalizados[nombre_norm] %in% nombres_coloquiales$nombres_comunes, 
+                                                nombres_coloquiales$nombres_reales[nombres_coloquiales$nombres_comunes == nombres_normalizados[nombre_norm]],
+                                                nombres_normalizados[nombre_norm])
+    #puntaje final
+    
+    puntaje <- (puntaje_tokens + puntaje_distancia) / 2
+    
+    # actualización de mejor emparejamiento
     if (puntaje > mejor_puntaje) {
-      mejor_empareja <- nombre_norm
+      mejor_empareja <- nombres_normalizados[nombre_norm]
       mejor_puntaje <- puntaje
     }
   }
@@ -38,6 +74,38 @@ tokens_similitud <- function(nombre_org, nombres_normalizados) {
 }
 
 
+#
+## tokenizacion y emparejamiento
+#tokens_similitud <- function(nombre_org, nombres_normalizados) {
+#  # tokenizacion de nombres originales
+#  nombre_org <- stringi::stri_trans_general(tolower(nombre_org),"Latin-ASCII")
+#  tokens_org <- unlist(stringr::str_split(nombre_org, " "))
+#  
+#  # asignacion de puntaje
+#  mejor_empareja <- ""
+#  mejor_puntaje <- -1
+#  
+#  # revision de nombres normalizados
+#  for (nombre_norm in nombres_normalizados) {
+#    # tokenizacion de nombres correctos
+#    token_norm <- unlist(stringr::str_split(nombre_norm, " "))
+#    
+#    # encontrar token compartidos entre los nombres originales y normalizados
+#    tokens_comunes <- intersect(tolower(tokens_org), tolower(token_norm))
+#    
+#    # calculo de similitud
+#    puntaje <- length(tokens_comunes) / length(token_norm)
+#    
+#    # actualizacion de mejor emparejamiento
+#    if (puntaje > mejor_puntaje) {
+#      mejor_empareja <- nombre_norm
+#      mejor_puntaje <- puntaje
+#    }
+#  }
+#  return(mejor_empareja)
+#}
+#
+#
 #' normalizar_calles
 #'
 #' geolocalizar direcciónes dentro de una base de datos
