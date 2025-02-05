@@ -12,30 +12,33 @@ diccionario_calles<- diccionario_calles %>%  filter(!is.na(diccionario_calles$no
 tokens_similitud <- function(nombre_org, nombres_normalizados){
   # tokenizacion de nombres originales
   
-  
+  #creo un data framme con el nombre comun y su correspondiente calle
   nombres_comunes <- c("general paz", "lacroze", "zavatarro", "j.b. justo", "ruta 8", "perez galdos", 
-                       "wernicke", "cafferata", "lincol", "gral lavalle", "padre elizalde")
-  nombres_reales <- c("avenida general jose maria paz","federico lacroze","pedro jose luis zavatarro","avenida juan b justo",
+                       "wernicke", "cafferata", "lincol", "gral lavalle", "padre elizalde",
+                       "avenida urquiza", "j d peron", "avenida alvear", "eva peron", "w del tata")
+ 
+   nombres_reales <- c("avenida general jose maria paz","federico lacroze","pedro jose luis zavatarro","avenida juan b justo",
                       "avenida eva duarte de peron","benito perez galdos","german wernicke","agustin cafferata", "abraham lincoln",
-                      "general juan galo lavalle", "padre agustin gabriel bonney elizalde")
+                      "general juan galo lavalle", "padre agustin gabriel bonney elizalde", "justo jose de urquiza", 
+                      "avenida presidente juan domingo peron", "avenida marcelo torcuato de alvear", "avenida eva duarte de peron", "doctor wenceslao de tata")
   
   nombres_coloquiales <- data.frame(nombres_comunes = nombres_comunes, nombres_reales = nombres_reales)
   rm(nombres_comunes, nombres_reales)
   
+  #agrego los nombres comunes en la lista de nombres normalizados asi los utiliza en la comparacion posterior 
   nombres_normalizados <- c(nombres_normalizados, nombres_coloquiales$nombres_comunes)
   
+  #modifico los nombres a corregir, para que esten en minusculas, sin tildes ni puntos para una mejor comparacion
   nombre_org <- stringi::stri_trans_general(tolower(nombre_org),"Latin-ASCII")
-  nombre_org <- gsub("\\.", "", nombre_org)
+  nombre_org <- gsub("\\.", " ", nombre_org)
   
-  nombre_org <- gsub("\\.", "", nombre_org)
+  #modifico abreviaciones con su forma completa para tener mas similitudes con su nombre completo 
+  #y no lo compare con otro erroneo
   nombre_org <- gsub("pte ", "presidente ", nombre_org)
   nombre_org <- gsub("av ", "avenida ", nombre_org)
   nombre_org <- gsub("gral ", "general ", nombre_org)
   nombre_org <- gsub("pres ", "presidente ", nombre_org)
   tokens_org <- unlist(stringr::str_split(nombre_org, " "))
-  
-  print(tokens_org)
-  
   
   #asignación de puntaje
   mejor_empareja <- ""
@@ -122,3 +125,4 @@ normalizar_calles <- function(df, nombre_calles) {
     dplyr::mutate(nombre_normalizado = tokens_similitud(!!dplyr::sym(nombre_calles), diccionario_calles$nombre_simp))
   return(df)
 }  
+
