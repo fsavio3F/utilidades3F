@@ -31,7 +31,9 @@ Utilidades3F tiene como objetivo centralizar un conjunto de funciones de uso fre
 
 * **ARBA_inventario()**: Nos permite obtener una descripción de las capas geográficas de ARBA disponibles mediante [geoarba](https://www.arba.gov.ar/geoarba/inicio.asp) para el municipio de Tres de Febrero.
 
-* **ARBA()**: Nos permite consultar las capas geográficas de ARBA ingresando el nombre de la capa de interes.
+* **ARBA()**: Nos permite consultar las capas geográficas de ARBA ingresando el nombre de la capa de interés.
+
+* **estructurar_directorio()**:Permite validar si existe un proyecto en el directorio de trabajo actual y verificar que exista una subcarpeta de insumos y otra de productos en el mismo. En caso de que las carpetas no existan las crea.
 
 # **Requisitos**
 
