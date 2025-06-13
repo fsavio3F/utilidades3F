@@ -13,6 +13,7 @@
 #' estructurar_directorio(verificar_proyecto = TRUE,
 #'  nombre_insumos = "insumos",
 #'  nombre_productos = "productos")
+#' @export
 estructurar_directorio <- function(
     verificar_proyecto = TRUE,
     nombre_insumos = "insumos",
