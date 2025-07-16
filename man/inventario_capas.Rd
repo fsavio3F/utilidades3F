@@ -4,12 +4,18 @@
 \alias{inventario_capas}
 \title{inventario_capas}
 \usage{
-inventario_capas(usar_autenticacion = FALSE, limpiar_prefijo = TRUE)
+inventario_capas(
+  usar_autenticacion = FALSE,
+  limpiar_prefijo = TRUE,
+  forzar_aislamiento = FALSE
+)
 }
 \arguments{
 \item{usar_autenticacion}{Lógico. Si TRUE, intenta cargar el token guardado del usuario para mostrar capas privadas.}
 
 \item{limpiar_prefijo}{Lógico. Si TRUE, remueve el prefijo "geonode:" de los nombres de capa.}
+
+\item{forzar_aislamiento}{Lógico. Si TRUE, fuerza el uso de un proceso limpio con `callr::r()` (útil para evitar uso de tokens activos).}
 }
 \value{
 Un vector con los nombres de las capas disponibles

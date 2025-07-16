@@ -46,30 +46,31 @@ autenticar_geoportal <- function(client_id, client_secret, guardar = TRUE) {
 #'
 #' @param usar_autenticacion Lógico. Si TRUE, intenta cargar el token guardado del usuario para mostrar capas privadas.
 #' @param limpiar_prefijo Lógico. Si TRUE, remueve el prefijo "geonode:" de los nombres de capa.
+#' @param forzar_aislamiento Lógico. Si TRUE, fuerza el uso de un proceso limpio con `callr::r()` (útil para evitar uso de tokens activos).
 #' @return Un vector con los nombres de las capas disponibles
 #' @export
-inventario_capas <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRUE) {
+inventario_capas <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRUE, forzar_aislamiento = FALSE) {
   token <- NULL
   cache_path <- file.path(path.expand("~"), ".geoportal3f-token.rds")
-
+  
+  if (!usar_autenticacion && file.exists(cache_path) && forzar_aislamiento) {
+    return(callr::r(
+      function(...) utilidades3F::inventario_capas(...),
+      args = list(usar_autenticacion = FALSE, limpiar_prefijo = limpiar_prefijo, forzar_aislamiento = FALSE),
+      show = FALSE
+    ))
+  }
+  
   if (usar_autenticacion) {
     if (file.exists(cache_path)) {
       token <- readRDS(cache_path)
     } else {
       warning("No se encontró token guardado. Solo se mostrarán capas públicas.")
     }
-  } else {
-    # Si hay un token presente, relanzar esta función en un proceso limpio
-    if (file.exists(cache_path)) {
-      return(callr::r(
-        function() utilidades3F::inventario_capas(usar_autenticacion = FALSE, limpiar_prefijo = limpiar_prefijo),
-        show = FALSE
-      ))
-    }
   }
-
+  
   headers <- if (!is.null(token)) httr::add_headers(Authorization = paste("Bearer", token$credentials$access_token)) else NULL
-
+  
   req <- if (is.null(headers)) {
     httr::GET(
       url = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",
@@ -82,16 +83,16 @@ inventario_capas <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRUE)
       headers
     )
   }
-
+  
   httr::stop_for_status(req)
   xml <- xml2::read_xml(httr::content(req, as = "text", encoding = "UTF-8"))
   capas <- xml2::xml_find_all(xml, ".//*[local-name()='FeatureType']/*[local-name()='Name']")
   nombres <- xml2::xml_text(capas)
-
+  
   if (limpiar_prefijo) {
     nombres <- sub("^geonode:", "", nombres)
   }
-
+  
   return(nombres)
 }
 
@@ -133,6 +134,9 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE) {
   cache_path <- file.path(path.expand("~"), ".geoportal3f-token.rds")
   if (!file.exists(cache_path)) {
     warning("No se encontró token guardado. Se intentará acceso público.")
+    if (usar_autenticacion == FALSE) {
+      stop("No se pudo acceder con autenticación ni de forma pública.")
+    }
     return(obtener_capa(nombre_de_capa, usar_autenticacion = FALSE))
   }
   
