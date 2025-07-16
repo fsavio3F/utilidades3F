@@ -4,17 +4,16 @@
 \alias{obtener_capa}
 \title{obtener_capa}
 \usage{
-obtener_capa(nombre_de_capa)
+obtener_capa(nombre_de_capa, usar_autenticacion = FALSE)
 }
 \arguments{
-\item{nombre_de_capa}{nombre de la capa a descargar}
+\item{nombre_de_capa}{Nombre completo de la capa (por ejemplo: "geonode:localidades").}
+
+\item{usar_autenticacion}{Lógico. Si TRUE, intenta usar el token guardado para autenticarse.}
 }
 \value{
-devuelve la capa deseada, en caso de no conocer el nombre utilizar la función de inventario_capas()
+Un objeto `sf` con los datos espaciales descargados.
 }
 \description{
-Permite descargar una capa del geoportal municipal ingresando su nombre
-}
-\examples{
-capa <- obtener_capa(nombre_de_capa = "localidades");
+Descarga una capa WFS del geoportal. Puede usarse con o sin autenticación.
 }

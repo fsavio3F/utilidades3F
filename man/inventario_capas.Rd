@@ -4,15 +4,14 @@
 \alias{inventario_capas}
 \title{inventario_capas}
 \usage{
-inventario_capas(
-  wfs = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",
-  service_version = "1.1.0",
-  pretty_output = TRUE
-)
+inventario_capas(usar_autenticacion = FALSE)
+}
+\arguments{
+\item{usar_autenticacion}{Lógico. Si TRUE, intenta cargar el token guardado del usuario para mostrar capas privadas.}
 }
 \value{
-devuelve las capas disponibles
+Un vector con los nombres de las capas disponibles.
 }
 \description{
-Nos devuelve un listado de las capas disponibles en el geoportal municipal
+Lista las capas disponibles en el geoportal. Ejecuta en entorno limpio si `usar_autenticacion = FALSE`.
 }
