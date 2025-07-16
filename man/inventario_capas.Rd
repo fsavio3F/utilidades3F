@@ -4,14 +4,16 @@
 \alias{inventario_capas}
 \title{inventario_capas}
 \usage{
-inventario_capas(usar_autenticacion = FALSE)
+inventario_capas(usar_autenticacion = FALSE, limpiar_prefijo = TRUE)
 }
 \arguments{
 \item{usar_autenticacion}{Lógico. Si TRUE, intenta cargar el token guardado del usuario para mostrar capas privadas.}
+
+\item{limpiar_prefijo}{Lógico. Si TRUE, remueve el prefijo "geonode:" de los nombres de capa.}
 }
 \value{
-Un vector con los nombres de las capas disponibles.
+Un vector con los nombres de las capas disponibles
 }
 \description{
-Lista las capas disponibles en el geoportal. Ejecuta en entorno limpio si `usar_autenticacion = FALSE`.
+Lista las capas disponibles en el geoportal.
 }

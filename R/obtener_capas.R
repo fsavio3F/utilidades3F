@@ -42,48 +42,48 @@ autenticar_geoportal <- function(client_id, client_secret, guardar = TRUE) {
 
 #' inventario_capas
 #'
-#' Lista las capas disponibles en el geoportal. Ejecuta en entorno limpio si `usar_autenticacion = FALSE`.
+#' Lista las capas disponibles en el geoportal.
 #'
 #' @param usar_autenticacion Lógico. Si TRUE, intenta cargar el token guardado del usuario para mostrar capas privadas.
-#' @return Un vector con los nombres de las capas disponibles.
+#' @param limpiar_prefijo Lógico. Si TRUE, remueve el prefijo "geonode:" de los nombres de capa.
+#' @return Un vector con los nombres de las capas disponibles
 #' @export
-inventario_capas <- function(usar_autenticacion = FALSE) {
-  if (!usar_autenticacion) {
-    return(callr::r(function() {
-      suppressPackageStartupMessages({
-        library(httr)
-        library(xml2)
-      })
-      req <- httr::GET(
-        url = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",
-        query = list(service = "WFS", request = "GetCapabilities"),
-        config = httr::config(cookie = "")
-      )
-      httr::stop_for_status(req)
-      xml <- xml2::read_xml(httr::content(req, as = "text", encoding = "UTF-8"))
-      nodos <- xml2::xml_find_all(xml, ".//*[local-name()='FeatureType']/*[local-name()='Name']")
-      capas <- xml2::xml_text(nodos)
-      return(capas)
-    }))
+inventario_capas <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRUE) {
+  token <- NULL
+  if (usar_autenticacion) {
+    cache_path <- file.path(path.expand("~"), ".geoportal3f-token.rds")
+    if (file.exists(cache_path)) {
+      token <- readRDS(cache_path)
+    } else {
+      warning("No se encontró token guardado. Solo se mostrarán capas públicas.")
+    }
   }
   
-  cache_path <- file.path(path.expand("~"), ".geoportal3f-token.rds")
-  if (!file.exists(cache_path)) {
-    warning("No se encontró token guardado. Solo se mostrarán capas públicas.")
-    return(inventario_capas(FALSE))
+  headers <- if (!is.null(token)) httr::add_headers(Authorization = paste("Bearer", token$credentials$access_token)) else NULL
+  
+  req <- if (is.null(headers)) {
+    httr::GET(
+      url = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",
+      query = list(service = "WFS", request = "GetCapabilities")
+    )
+  } else {
+    httr::GET(
+      url = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",
+      query = list(service = "WFS", request = "GetCapabilities"),
+      headers
+    )
   }
   
-  token <- readRDS(cache_path)
-  req <- httr::GET(
-    url = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",
-    query = list(service = "WFS", request = "GetCapabilities"),
-    httr::add_headers(Authorization = paste("Bearer", token$credentials$access_token))
-  )
   httr::stop_for_status(req)
   xml <- xml2::read_xml(httr::content(req, as = "text", encoding = "UTF-8"))
-  nodos <- xml2::xml_find_all(xml, ".//*[local-name()='FeatureType']/*[local-name()='Name']")
-  capas <- xml2::xml_text(nodos)
-  return(capas)
+  capas <- xml2::xml_find_all(xml, ".//*[local-name()='FeatureType']/*[local-name()='Name']")
+  nombres <- xml2::xml_text(capas)
+  
+  if (limpiar_prefijo) {
+    nombres <- sub("^geonode:", "", nombres)
+  }
+  
+  return(nombres)
 }
 
 #' obtener_capa
