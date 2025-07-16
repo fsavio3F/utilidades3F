@@ -10,7 +10,7 @@
 #' actualizar_utilidades3F()  # Instala desde main
 #' actualizar_utilidades3F(ref = "desarrollo")  # Instala desde rama desarrollo
 #' @export
-actualizar_utilidades3F <- function(ref = "main", ...) {
+actualizar_utilidades3F <- function(ref = "estable", ...) {
   if (!requireNamespace("devtools", quietly = TRUE)) {
     message("🚨 El paquete 'devtools' es necesario para actualizar desde GitHub.")
     message("👉 Instalalo con: install.packages('devtools')")
