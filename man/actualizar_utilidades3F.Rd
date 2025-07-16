@@ -12,12 +12,12 @@ actualizar_utilidades3F(ref = "main", ...)
 \item{...}{Argumentos adicionales que se pasan a `devtools::install_github()`.}
 }
 \value{
-Mensaje de instalación exitosa.
+Mensaje de instalación o error.
 }
 \description{
 Reinstala el paquete `utilidades3F` desde el repositorio oficial de GitHub.
 }
 \examples{
 actualizar_utilidades3F()  # Instala desde main
-actualizar_utilidades3F(ref = "desarrollo")  # Instala rama desarrollo
+actualizar_utilidades3F(ref = "desarrollo")  # Instala desde rama desarrollo
 }
