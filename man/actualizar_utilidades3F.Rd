@@ -4,10 +4,10 @@
 \alias{actualizar_utilidades3F}
 \title{actualizar_utilidades3F}
 \usage{
-actualizar_utilidades3F(ref = "main", ...)
+actualizar_utilidades3F(ref = "estable", ...)
 }
 \arguments{
-\item{ref}{Rama o tag a instalar. Por defecto usa "main".}
+\item{ref}{Rama o tag a instalar. Por defecto usa "estable".}
 
 \item{...}{Argumentos adicionales que se pasan a `devtools::install_github()`.}
 }
@@ -18,6 +18,6 @@ Mensaje de instalación o error.
 Reinstala el paquete `utilidades3F` desde el repositorio oficial de GitHub.
 }
 \examples{
-actualizar_utilidades3F()  # Instala desde main
-actualizar_utilidades3F(ref = "desarrollo")  # Instala desde rama desarrollo
+actualizar_utilidades3F()  # Instala desde rama "estable"
+actualizar_utilidades3F(ref = "otra-rama")  # Instala desde una rama alternativa
 }
