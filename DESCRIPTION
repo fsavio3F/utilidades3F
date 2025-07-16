@@ -4,19 +4,19 @@ Title: Funciones útiles para 3F(utilidades3F)
 Version: 0.1.1
 Author: Federico Savio
 Maintainer: Federico Savio <fsavio.3f@gmail.com>
-Description: Este paquete contiene distintas funciones de uso frecuente dentro del Departamento de Datos de la Municipalidad de Tres de Febrero 
+Description: Este paquete contiene distintas funciones de uso frecuente dentro del Departamento de Datos de la Municipalidad de Tres de Febrero.
 License: UWU
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 Collate: 
+    'obtener_capas.R'
     'ARBA.R'
+    'actualizar_utilidades3F.R'
     'estructurar_directorio.R'
-    'geoportal_auth_wfs.R'
     'geolocalizar.R'
     'normalizar_calles.R'
     'normalizar_localidades.R'
-    'obtener_capas.R'
     'validador_paquetes.R'
 Imports:
     callr,
@@ -30,3 +30,5 @@ Imports:
     stringi,
     stringr,
     xml2
+Suggests:
+    devtools

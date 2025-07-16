@@ -2,6 +2,7 @@
 
 export(ARBA)
 export(ARBA_inventario)
+export(actualizar_utilidades3F)
 export(autenticar_geoportal)
 export(estructurar_directorio)
 export(geocodificar_df)
