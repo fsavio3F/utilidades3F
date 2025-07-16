@@ -15,7 +15,7 @@ inventario_capas(
 
 \item{limpiar_prefijo}{Lógico. Si TRUE, remueve el prefijo "geonode:" de los nombres de capa.}
 
-\item{forzar_aislamiento}{Lógico. Si TRUE, fuerza el uso de un proceso limpio con `callr::r()` (útil para evitar uso de tokens activos).}
+\item{forzar_aislamiento}{Lógico. Obsoleto. El aislamiento ahora es automático cuando usar_autenticacion = FALSE.}
 }
 \value{
 Un vector con los nombres de las capas disponibles
