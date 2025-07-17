@@ -114,18 +114,17 @@ inventario_capas <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRUE,
 #' @return Un objeto `sf` con los datos espaciales descargados.
 #' @export
 obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = FALSE) {
-  # Obtener listado de capas según el modo
+  # Validar nombre de capa antes de intentar descargar
   inventario <- inventario_capas(usar_autenticacion = usar_autenticacion)
-  
-  posibles_nombres <- unique(c(nombre_de_capa,
-                               paste0("geonode:", nombre_de_capa),
-                               sub("^geonode:", "", nombre_de_capa)))
-  
+  posibles_nombres <- unique(c(
+    nombre_de_capa,
+    paste0("geonode:", nombre_de_capa),
+    sub("^geonode:", "", nombre_de_capa)
+  ))
   nombre_valido <- intersect(posibles_nombres, inventario)[1]
   
   if (is.na(nombre_valido)) {
-    stop("❌ La capa '", nombre_de_capa, "' no está disponible en el geoportal. ",
-         "Revisá el nombre o el parámetro 'usar_autenticacion'.")
+    stop("❌ La capa solicitada no existe en el geoportal. Revisá el nombre o el parámetro 'usar_autenticacion'.")
   }
   
   if (!usar_autenticacion && !.interno) {
@@ -150,9 +149,15 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
         httr::stop_for_status(res)
         
         tmp <- tempfile(fileext = ".geojson")
-        writeLines(httr::content(res, as = "text", encoding = "UTF-8"), tmp)
-        capa <- sf::read_sf(tmp)
-        sf::st_transform(capa, crs = 4326)
+        content_text <- httr::content(res, as = "text", encoding = "UTF-8")
+        writeLines(content_text, tmp)
+        
+        tryCatch({
+          capa <- sf::read_sf(tmp)
+          sf::st_transform(capa, crs = 4326)
+        }, error = function(e) {
+          stop("❌ La capa solicitada no está disponible públicamente o la respuesta no es válida.")
+        })
       },
       args = list(nombre = nombre_valido),
       show = FALSE
@@ -183,7 +188,11 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
   
   tmp <- tempfile(fileext = ".geojson")
   writeLines(httr::content(res, as = "text", encoding = "UTF-8"), tmp)
-  capa <- sf::read_sf(tmp)
-  sf::st_transform(capa, crs = 4326)
+  
+  tryCatch({
+    capa <- sf::read_sf(tmp)
+    sf::st_transform(capa, crs = 4326)
+  }, error = function(e) {
+    stop("❌ La capa solicitada no pudo ser cargada. Verificá permisos y formato.")
+  })
 }
-
