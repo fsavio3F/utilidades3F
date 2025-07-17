@@ -11,7 +11,7 @@ autenticar_geoportal(client_id, client_secret, guardar = TRUE)
 
 \item{client_secret}{Clave secreta del cliente OAuth2.}
 
-\item{guardar}{Si TRUE, guarda el token en el directorio base del usuario y lo reutiliza en sesiones siguientes.}
+\item{guardar}{Si TRUE, guarda el token en un directorio persistente del usuario y lo reutiliza en sesiones siguientes.}
 }
 \value{
 Un objeto de clase `Token2.0` con credenciales OAuth2.
