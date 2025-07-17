@@ -117,6 +117,12 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
   if (!usar_autenticacion && !.interno) {
     return(callr::r(
       function(nombre) {
+        suppressPackageStartupMessages({
+          library(httr)
+          library(sf)
+          library(jsonlite)
+        })
+        
         url <- httr::modify_url(
           url = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",
           query = list(
@@ -129,8 +135,16 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
         )
         res <- httr::GET(url)
         httr::stop_for_status(res)
+        
+        contenido <- httr::content(res, as = "text", encoding = "UTF-8")
+        
+        # Verifica si es JSON válido
+        if (!jsonlite::validate(contenido)) {
+          stop("❌ La capa solicitada no está disponible públicamente o la respuesta no es válida.")
+        }
+        
         tmp <- tempfile(fileext = ".geojson")
-        writeLines(httr::content(res, as = "text", encoding = "UTF-8"), tmp)
+        writeLines(contenido, tmp)
         capa <- sf::read_sf(tmp)
         sf::st_transform(capa, crs = 4326)
       },
