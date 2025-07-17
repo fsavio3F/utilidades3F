@@ -7,7 +7,7 @@
 obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, .interno = FALSE)
 }
 \arguments{
-\item{nombre_de_capa}{Nombre completo de la capa (por ejemplo: "geonode:localidades").}
+\item{nombre_de_capa}{Nombre completo o sin prefijo de la capa (por ejemplo: "localidades" o "geonode:localidades").}
 
 \item{usar_autenticacion}{Lógico. Si TRUE, intenta usar el token guardado para autenticarse.}
 
