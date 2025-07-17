@@ -46,25 +46,34 @@ autenticar_geoportal <- function(client_id, client_secret, guardar = TRUE) {
 #'
 #' @param usar_autenticacion Lógico. Si TRUE, intenta cargar el token guardado del usuario para mostrar capas privadas.
 #' @param limpiar_prefijo Lógico. Si TRUE, remueve el prefijo "geonode:" de los nombres de capa.
-#' @param forzar_aislamiento Lógico. Obsoleto. El aislamiento ahora es automático cuando usar_autenticacion = FALSE.
+#' @param .interno No tocar. Usado internamente para evitar recursión infinita.
 #' @return Un vector con los nombres de las capas disponibles
 #' @export
-inventario_capas <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRUE, forzar_aislamiento = FALSE) {
-  if (!usar_autenticacion) {
+inventario_capas <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRUE, .interno = FALSE) {
+  if (!usar_autenticacion && !.interno) {
     return(callr::r(
-      function(...) {
-        suppressPackageStartupMessages(library(utilidades3F))
-        inventario_capas(usar_autenticacion = FALSE, limpiar_prefijo = limpiar_prefijo)
+      function(limpiar_prefijo) {
+        req <- httr::GET(
+          url = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",
+          query = list(service = "WFS", request = "GetCapabilities")
+        )
+        httr::stop_for_status(req)
+        xml <- xml2::read_xml(httr::content(req, as = "text", encoding = "UTF-8"))
+        capas <- xml2::xml_find_all(xml, ".//*[local-name()='FeatureType']/*[local-name()='Name']")
+        nombres <- xml2::xml_text(capas)
+        if (limpiar_prefijo) nombres <- sub("^geonode:", "", nombres)
+        return(nombres)
       },
+      args = list(limpiar_prefijo = limpiar_prefijo),
       show = FALSE
     ))
   }
   
   token <- NULL
   cache_path <- file.path(path.expand("~"), ".geoportal3f-token.rds")
-  if (file.exists(cache_path)) {
+  if (usar_autenticacion && file.exists(cache_path)) {
     token <- readRDS(cache_path)
-  } else {
+  } else if (usar_autenticacion) {
     warning("No se encontró token guardado. Solo se mostrarán capas públicas.")
   }
   
@@ -94,39 +103,39 @@ inventario_capas <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRUE,
 #'
 #' @param nombre_de_capa Nombre completo de la capa (por ejemplo: "geonode:localidades").
 #' @param usar_autenticacion Lógico. Si TRUE, intenta usar el token guardado para autenticarse.
+#' @param .interno No tocar. Usado internamente para evitar recursión infinita.
 #' @return Un objeto `sf` con los datos espaciales descargados.
 #' @export
-obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE) {
-  if (!usar_autenticacion) {
-    return(callr::r(function(nombre) {
-      suppressPackageStartupMessages({
-        library(httr)
-        library(sf)
-      })
-      url <- httr::modify_url(
-        url = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",
-        query = list(
-          service = "WFS",
-          version = "1.1.0",
-          request = "GetFeature",
-          typename = nombre,
-          outputFormat = "application/json"
+obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = FALSE) {
+  if (!usar_autenticacion && !.interno) {
+    return(callr::r(
+      function(nombre) {
+        url <- httr::modify_url(
+          url = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",
+          query = list(
+            service = "WFS",
+            version = "1.1.0",
+            request = "GetFeature",
+            typename = nombre,
+            outputFormat = "application/json"
+          )
         )
-      )
-      res <- httr::GET(url, config = httr::config(cookie = ""))
-      httr::stop_for_status(res)
-      
-      tmp <- tempfile(fileext = ".geojson")
-      writeLines(httr::content(res, as = "text", encoding = "UTF-8"), tmp)
-      capa <- sf::read_sf(tmp)
-      sf::st_transform(capa, crs = 4326)
-    }, args = list(nombre = nombre_de_capa)))
+        res <- httr::GET(url)
+        httr::stop_for_status(res)
+        tmp <- tempfile(fileext = ".geojson")
+        writeLines(httr::content(res, as = "text", encoding = "UTF-8"), tmp)
+        capa <- sf::read_sf(tmp)
+        sf::st_transform(capa, crs = 4326)
+      },
+      args = list(nombre = nombre_de_capa),
+      show = FALSE
+    ))
   }
   
   cache_path <- file.path(path.expand("~"), ".geoportal3f-token.rds")
   if (!file.exists(cache_path)) {
     warning("No se encontró token guardado. Se intentará acceso público.")
-    return(obtener_capa(nombre_de_capa, usar_autenticacion = FALSE))
+    return(obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, .interno = TRUE))
   }
   
   token <- readRDS(cache_path)

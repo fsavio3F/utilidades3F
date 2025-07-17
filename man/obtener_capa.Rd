@@ -4,12 +4,14 @@
 \alias{obtener_capa}
 \title{obtener_capa}
 \usage{
-obtener_capa(nombre_de_capa, usar_autenticacion = FALSE)
+obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, .interno = FALSE)
 }
 \arguments{
 \item{nombre_de_capa}{Nombre completo de la capa (por ejemplo: "geonode:localidades").}
 
 \item{usar_autenticacion}{Lógico. Si TRUE, intenta usar el token guardado para autenticarse.}
+
+\item{.interno}{No tocar. Usado internamente para evitar recursión infinita.}
 }
 \value{
 Un objeto `sf` con los datos espaciales descargados.

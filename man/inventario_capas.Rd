@@ -7,7 +7,7 @@
 inventario_capas(
   usar_autenticacion = FALSE,
   limpiar_prefijo = TRUE,
-  forzar_aislamiento = FALSE
+  .interno = FALSE
 )
 }
 \arguments{
@@ -15,7 +15,7 @@ inventario_capas(
 
 \item{limpiar_prefijo}{Lógico. Si TRUE, remueve el prefijo "geonode:" de los nombres de capa.}
 
-\item{forzar_aislamiento}{Lógico. Obsoleto. El aislamiento ahora es automático cuando usar_autenticacion = FALSE.}
+\item{.interno}{No tocar. Usado internamente para evitar recursión infinita.}
 }
 \value{
 Un vector con los nombres de las capas disponibles
