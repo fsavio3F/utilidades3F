@@ -25,7 +25,7 @@ autenticar_geoportal <- function(client_id, client_secret, guardar = TRUE) {
   # Token en directorio persistente del usuario
   token_dir <- tools::R_user_dir("geoportal3f", which = "cache")
   if (!dir.exists(token_dir)) dir.create(token_dir, recursive = TRUE)
-  cache_path <- file.path(token_dir, "token.rds")
+  cache_path <- file.path(token_dir, "token_geoportal3F.rds")
   
   if (guardar && file.exists(cache_path)) {
     token <- readRDS(cache_path)
@@ -76,7 +76,7 @@ inventario_capas <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRUE,
   }
   
   token_dir <- tools::R_user_dir("geoportal3f", which = "cache")
-  cache_path <- file.path(token_dir, "token.rds")
+  cache_path <- file.path(token_dir, "token_geoportal3F.rds")
   token <- NULL
   if (usar_autenticacion && file.exists(cache_path)) {
     token <- readRDS(cache_path)
@@ -154,7 +154,7 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
   }
   
   token_dir <- tools::R_user_dir("geoportal3f", which = "cache")
-  cache_path <- file.path(token_dir, "token.rds")
+  cache_path <- file.path(token_dir, "token_geoportal3F.rds")
   if (!file.exists(cache_path)) {
     warning("No se encontró token guardado. Se intentará acceso público.")
     return(obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, .interno = TRUE))
