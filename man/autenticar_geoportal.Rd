@@ -19,7 +19,3 @@ Un objeto de clase `Token2.0` con credenciales OAuth2.
 \description{
 Inicia sesión en el GeoPortal de Tres de Febrero mediante OAuth2 y devuelve un token de acceso válido.
 }
-\examples{
-token <- autenticar_geoportal("mi_client_id", "mi_client_secret", guardar = TRUE)
-token <- autenticar_geoportal()  # Reutiliza el token ya guardado
-}

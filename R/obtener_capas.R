@@ -6,29 +6,26 @@
 #' @param client_secret Clave secreta del cliente OAuth2. No es necesario si el token ya fue guardado previamente.
 #' @param guardar Si TRUE, guarda el token en un directorio persistente del usuario y lo reutiliza en sesiones siguientes.
 #' @return Un objeto de clase `Token2.0` con credenciales OAuth2.
-#' @examples
-#' token <- autenticar_geoportal("mi_client_id", "mi_client_secret", guardar = TRUE)
-#' token <- autenticar_geoportal()  # Reutiliza el token ya guardado
 #' @export
 autenticar_geoportal <- function(client_id = NULL, client_secret = NULL, guardar = TRUE) {
-  # Ruta persistente al token
   token_dir <- tools::R_user_dir("geoportal3f", which = "cache")
   if (!dir.exists(token_dir)) dir.create(token_dir, recursive = TRUE)
   cache_path <- file.path(token_dir, "token_geoportal3F.rds")
   
-  # Si ya existe un token guardado, usarlo
   if (guardar && file.exists(cache_path)) {
-    token <- readRDS(cache_path)
-    message("🔓 Token cargado desde: ", cache_path)
-    return(token)
+    token <- tryCatch(readRDS(cache_path), error = function(e) NULL)
+    if (!is.null(token)) {
+      message("🔓 Token cargado desde: ", cache_path)
+      return(token)
+    } else {
+      message("⚠️ Error al leer el token guardado. Se intentará reautenticar.")
+    }
   }
   
-  # Si no hay credenciales para autenticar, dar error
   if (is.null(client_id) || is.null(client_secret)) {
-    stop("❌ No se encontró un token guardado y no se proporcionaron client_id y client_secret.")
+    stop("❌ No se encontró un token válido y no se proporcionaron client_id y client_secret.")
   }
   
-  # Proceso de autenticación OAuth2
   endpoint <- httr::oauth_endpoint(
     authorize = "https://geoportal.tresdefebrero.gob.ar/o/authorize/",
     access    = "https://geoportal.tresdefebrero.gob.ar/o/token/"
@@ -56,7 +53,6 @@ autenticar_geoportal <- function(client_id = NULL, client_secret = NULL, guardar
   
   return(token)
 }
-
 
 #' inventario_capas
 #'
@@ -90,8 +86,10 @@ inventario_capas <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRUE,
   token_dir <- tools::R_user_dir("geoportal3f", which = "cache")
   cache_path <- file.path(token_dir, "token_geoportal3F.rds")
   token <- NULL
+  
   if (usar_autenticacion && file.exists(cache_path)) {
-    token <- readRDS(cache_path)
+    token <- tryCatch(readRDS(cache_path), error = function(e) NULL)
+    if (is.null(token)) warning("⚠️ El token guardado no pudo leerse correctamente.")
   } else if (usar_autenticacion) {
     warning("No se encontró token guardado. Solo se mostrarán capas públicas.")
   }
@@ -126,13 +124,14 @@ inventario_capas <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRUE,
 #' @return Un objeto `sf` con los datos espaciales descargados.
 #' @export
 obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = FALSE) {
-  # Validar nombre de capa antes de intentar descargar
   inventario <- inventario_capas(usar_autenticacion = usar_autenticacion)
+  
   posibles_nombres <- unique(c(
     nombre_de_capa,
     paste0("geonode:", nombre_de_capa),
     sub("^geonode:", "", nombre_de_capa)
   ))
+  
   nombre_valido <- intersect(posibles_nombres, inventario)[1]
   
   if (is.na(nombre_valido)) {
@@ -157,19 +156,20 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
             outputFormat = "application/json"
           )
         )
+        
         res <- httr::GET(url)
         httr::stop_for_status(res)
         
         tmp <- tempfile(fileext = ".geojson")
-        content_text <- httr::content(res, as = "text", encoding = "UTF-8")
-        writeLines(content_text, tmp)
+        writeLines(httr::content(res, as = "text", encoding = "UTF-8"), tmp)
         
-        tryCatch({
-          capa <- sf::read_sf(tmp)
-          sf::st_transform(capa, crs = 4326)
+        capa <- tryCatch({
+          sf::read_sf(tmp) |> sf::st_transform(crs = 4326)
         }, error = function(e) {
           stop("❌ La capa solicitada no está disponible públicamente o la respuesta no es válida.")
         })
+        
+        return(capa)
       },
       args = list(nombre = nombre_valido),
       show = FALSE
@@ -184,7 +184,13 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
     return(obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, .interno = TRUE))
   }
   
-  token <- readRDS(cache_path)
+  token <- tryCatch(readRDS(cache_path), error = function(e) NULL)
+  
+  if (is.null(token)) {
+    warning("⚠️ No se pudo leer el token. Se intentará acceso público.")
+    return(obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, .interno = TRUE))
+  }
+  
   url <- httr::modify_url(
     url = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",
     query = list(
@@ -195,16 +201,18 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
       outputFormat = "application/json"
     )
   )
+  
   res <- httr::GET(url, httr::add_headers(Authorization = paste("Bearer", token$credentials$access_token)))
   httr::stop_for_status(res)
   
   tmp <- tempfile(fileext = ".geojson")
   writeLines(httr::content(res, as = "text", encoding = "UTF-8"), tmp)
   
-  tryCatch({
-    capa <- sf::read_sf(tmp)
-    sf::st_transform(capa, crs = 4326)
+  capa <- tryCatch({
+    sf::read_sf(tmp) |> sf::st_transform(crs = 4326)
   }, error = function(e) {
     stop("❌ La capa solicitada no pudo ser cargada. Verificá permisos y formato.")
   })
+  
+  return(capa)
 }
