@@ -177,7 +177,7 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
   }
   
   token_dir <- tools::R_user_dir("geoportal3f", which = "cache")
-  cache_path <- file.path(token_dir, "token.rds")
+  cache_path <- file.path(token_dir, "token_geoportal3F.rds")
   
   if (!file.exists(cache_path)) {
     warning("No se encontró token guardado. Se intentará acceso público.")
