@@ -4,12 +4,12 @@
 \alias{autenticar_geoportal}
 \title{autenticar_geoportal}
 \usage{
-autenticar_geoportal(client_id, client_secret, guardar = TRUE)
+autenticar_geoportal(client_id = NULL, client_secret = NULL, guardar = TRUE)
 }
 \arguments{
-\item{client_id}{ID del cliente OAuth2 registrado en el geoportal.}
+\item{client_id}{ID del cliente OAuth2 registrado en el geoportal. No es necesario si el token ya fue guardado previamente.}
 
-\item{client_secret}{Clave secreta del cliente OAuth2.}
+\item{client_secret}{Clave secreta del cliente OAuth2. No es necesario si el token ya fue guardado previamente.}
 
 \item{guardar}{Si TRUE, guarda el token en un directorio persistente del usuario y lo reutiliza en sesiones siguientes.}
 }
@@ -21,4 +21,5 @@ Inicia sesión en el GeoPortal de Tres de Febrero mediante OAuth2 y devuelve un 
 }
 \examples{
 token <- autenticar_geoportal("mi_client_id", "mi_client_secret", guardar = TRUE)
+token <- autenticar_geoportal()  # Reutiliza el token ya guardado
 }
