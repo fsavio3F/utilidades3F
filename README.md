@@ -17,7 +17,7 @@ El paquete `utilidades3F` busca centralizar en un solo lugar un conjunto de func
 ### Autenticación y descarga desde Geoportal 3F
 
 - **autenticar_geoportal()**: Inicia sesión en el geoportal mediante OAuth2 y guarda el token en un directorio persistente del usuario.
-- **inventario_capas()**: Lista las capas disponibles del geoportal. Si se habilita la autenticación, incluye capas privadas.
+- **obtener_inventario()**: Lista las capas disponibles del geoportal. Si se habilita la autenticación, incluye capas privadas.
 - **obtener_capa()**: Descarga una capa pública o privada del geoportal como objeto `sf`. Valida que la capa exista en el inventario. El acceso sin autenticación se ejecuta en una sesión separada por seguridad.
 
 ### Funciones geoespaciales
@@ -28,12 +28,12 @@ El paquete `utilidades3F` busca centralizar en un solo lugar un conjunto de func
 
 ### Funciones para ARBA
 
-- **ARBA_inventario()**: Lista las capas disponibles del geoportal de ARBA para el partido.
-- **ARBA()**: Descarga capas específicas del geoportal de ARBA.
+- **obtener_inventario_ARBA()**: Lista las capas disponibles del geoportal de ARBA para el partido.
+- **obtener_capa_ARBA()**: Descarga capas específicas del geoportal de ARBA.
 
 ### Organización y validación
 
-- **validador_paquetes()**: Verifica si los paquetes necesarios están instalados. Si no, los instala automáticamente.
+- **validar_paquetes()**: Verifica si los paquetes necesarios están instalados. Si no, los instala automáticamente.
 - **estructurar_directorio()**: Revisa si existe un proyecto y crea subcarpetas `/insumos` y `/productos` si no están.
 - **actualizar_utilidades3F()**: Reinstala el paquete desde GitHub. Se puede especificar una rama (por defecto: `estable`).
 
