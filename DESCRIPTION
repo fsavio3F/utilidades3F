@@ -18,6 +18,7 @@ Collate:
     'estructurar_directorio.R'
     'geolocalizar.R'
     'normalizar_localidades.R'
+    'prueba_normalizar_calles.R'
     'validar_paquetes.R'
 Imports:
     callr,
