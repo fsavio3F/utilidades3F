@@ -1,47 +1,51 @@
 # **utilidades3F**
 
-**Autor y mantenimiento:** *Federico Savio*
-
+**Autor y mantenimiento:** *[Federico Savio](https://github.com/fsavio3F)*.
+ 
 ## Tabla de contenidos
 
-1. [Objetivo](#Objetivo)
-   
-2. [Funciones disponibles](#Funciones-disponibles)
-
-3. [Requisitos](#Requisitos)
-  
+1. [Objetivo](#objetivo)
+2. [Funciones disponibles](#funciones-disponibles)
+3. [Requisitos](#requisitos)
 
 # **Objetivo**
 
-Utilidades3F tiene como objetivo centralizar un conjunto de funciones de uso frecuente dentro del Departamento de Datos de la municipalidad de Tres de Febrero en un único paquete
-
+El paquete `utilidades3F` busca centralizar en un solo lugar un conjunto de funciones que usamos frecuentemente en el Departamento de Datos de la Municipalidad de Tres de Febrero.
 
 # **Funciones disponibles**
-* **validador_paquetes()**: Nos permite utilizar un vector con los paquetes a utilizar para verificar que esten instalados y cargarlos. En caso de no estar instalados los instala.
 
-* **inventario_capas()**: Nos permite obtener un listado de las capas públicas disponibles en el [geoportal municipal](https://geoportal.tresdefebrero.gob.ar/).
+### Autenticación y descarga desde Geoportal 3F
 
-* **obtener_capa()**: Nos permite obtener una capa pública del [geoportal municipal](https://geoportal.tresdefebrero.gob.ar/) utilizando el nombre salido de la función *inventario_capas()*.
+- **autenticar_geoportal()**: Inicia sesión en el geoportal mediante OAuth2 y guarda el token en un directorio persistente del usuario.
+- **obtener_inventario()**: Lista las capas disponibles del geoportal. Si se habilita la autenticación, incluye capas privadas.
+- **obtener_capa()**: Descarga una capa pública o privada del geoportal como objeto `sf`. Valida que la capa exista en el inventario. El acceso sin autenticación se ejecuta en una sesión separada por seguridad.
 
-* **geocodificar_df()**: Nos permite obtener las coordenadas, dirección normalizada, y código postal para un  conjunto de datos del cual dispongamos la calle y la altura utilizando los servicios de nominatim. **¹**
+### Funciones geoespaciales
 
-* **normalizar_localidades()**: Nos permite normalizar los nombres de las localidades del partido de Tres de Febrero mediante la unión espacial de los [polígonos de las localidades disponibles en el geoportal municipal](https://geoportal.tresdefebrero.gob.ar/layers/geonode_data:geonode:localidades) basándonos en la ordenanza [Nº 2096](https://geoportal.tresdefebrero.gob.ar/documents/807).
-  
-* **normalizar_calles()**: Nos permite normalizar los nombres de las calles en base a la información disponible del censo de calles.
+- **geocodificar_df()**: Devuelve coordenadas y dirección normalizada usando un servidor local de Nominatim. **¹**
+- **normalizar_localidades()**: Normaliza nombres de localidades del partido según la ordenanza N° 2096, usando la capa `localidades` del geoportal.
+- **normalizar_calles()**: Normaliza nombres de calles con base en el censo vial.
 
-* **ARBA_inventario()**: Nos permite obtener una descripción de las capas geográficas de ARBA disponibles mediante [geoarba](https://www.arba.gov.ar/geoarba/inicio.asp) para el municipio de Tres de Febrero.
+### Funciones para ARBA
 
-* **ARBA()**: Nos permite consultar las capas geográficas de ARBA ingresando el nombre de la capa de interes.
+- **obtener_inventario_ARBA()**: Lista las capas disponibles del geoportal de ARBA para el partido.
+- **obtener_capa_ARBA()**: Descarga capas específicas del geoportal de ARBA.
+
+### Organización y validación
+
+- **validar_paquetes()**: Verifica si los paquetes necesarios están instalados. Si no, los instala automáticamente.
+- **estructurar_directorio()**: Revisa si existe un proyecto y crea subcarpetas `/insumos` y `/productos` si no están.
+- **actualizar_utilidades3F()**: Reinstala el paquete desde GitHub. Se puede especificar una rama (por defecto: `estable`).
 
 # **Requisitos**
 
-Para instalar el paquete de utilidades3F es necesario primero contar con la librería de devtools en R la cual contiene la función *install_github()* que nos permite instalar paquetes de R almacenados en github.
+Para instalar el paquete `utilidades3F` es necesario tener la librería `devtools`:
 
-```sh
+```r
 install.packages("devtools")
 devtools::install_github("Datos-3F/utilidades3F")
 ```
 
-Una vez realizado este paso podremos comenzar a utilizar las funciones disponibles en el paquete.**¹**
+Una vez hecho eso, ya se pueden usar las funciones normalmente.
 
-**¹ IMPORTANTE**: Para poder utilizar la función *geocodificar_df()* es necesario correr localmente un servidor de nominatim siguiendo estas [instrucciones](https://github.com/fsavio3F/OpenGeocoding).
+**¹ IMPORTANTE**: Para usar `geocodificar_df()` es necesario tener un servidor local de Nominatim. Las instrucciones están disponibles en este [repositorio de GitHub](https://github.com/fsavio3F/OpenGeocoding).

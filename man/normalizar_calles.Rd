@@ -15,8 +15,8 @@ normalizar_calles(df, nombre_calles)
 devuelve la base de datos con una columna adicional con los nombres de calles normalizados
 }
 \description{
-Permite normalizar los nombres de calles de una base de datos para el municipio de Tres de Febrero
+geolocalizar direcciónes dentro de una base de datos
 }
 \examples{
-nombre_normalizados <- normalizar_calles(df, nombre_calles = "calle_nombre");
+nombre_normalizados <- normalizar_calles(df, nombre_calles = "calle_nom");
 }

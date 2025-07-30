@@ -1,13 +1,13 @@
-#' ARBA
+#' obtener_capa_ARBA
 #'
 #' @param nombre_de_capa nombre de la capa a descargar
-#' @return devuelve la capa deseada, en caso de no conocer el nombre utilizar la función de ARBA_inventario()
+#' @return devuelve la capa deseada, en caso de no conocer el nombre utilizar la función de inventario_obtener_capa_ARBA()
 #' @examples
-#' capa <- ARBA(nombre_de_capa = "Parcela");
+#' capa <- obtener_capa_ARBA(nombre_de_capa = "Parcela");
 #' @export
-ARBA <- function(nombre_de_capa){
+obtener_capa_ARBA <- function(nombre_de_capa){
   # URL del servicio del GeoPortal
-  url_base <- "https://geo.arba.gov.ar/datoabierto/datos/117/"
+  url_base <- "https://geo.ARBA.gov.ar/datoabierto/datos/117/"
   # Construir la consulta usando el nombre de la capa requerida
   agregacion <- c("Subparcela","Departamento","Medida Lado","Circunscripcion","Fraccion","Parcela","Seccion Catastral","Manzana")
   codigo_agregacion <- c("110108","070121","110109","110107","110106","110101","110103","110102")
@@ -36,12 +36,12 @@ ARBA <- function(nombre_de_capa){
 
 }
 
-#' ARBA_inventario
+#' inventario_ARBA
 #'
 #' @return devuelve un listado de las capa disponibles para descargar de los geoservicios de ARBA
 #' @export
 
-ARBA_inventario<- function() {
+inventario_ARBA<- function() {
   nombre_capa<- c("Subparcela","Departamento","Medida Lado","Circunscripcion","Fraccion","Parcela","Seccion Catastral","Manzana")
   descripcion <- c("La propiedad de la unidad funcional o subparcela comprende la parte indivisa del terreno, de las cosas y partes de uso común del inmueble o indispensables para mantener su seguridad, y puede abarcar una o más unidades complementarias destinadas a servirla.",
                    "División político administrativa de segundo orden. Incluye partido y comuna.",
