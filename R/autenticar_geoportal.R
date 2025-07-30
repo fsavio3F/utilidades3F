@@ -2,18 +2,19 @@
 #'
 #' Inicia sesión en el GeoPortal de Tres de Febrero mediante OAuth2 y devuelve un token de acceso válido.
 #'
-#' @param client_id ID del cliente OAuth2. Si no está en `.Renviron`, se puede pasar como argumento.
-#' @param client_secret Clave secreta OAuth2. Si no está en `.Renviron`, se puede pasar como argumento.
-#' @param guardar Si TRUE, guarda el token y también las credenciales en `.Renviron` si no están.
-#' @param usar_cache Si TRUE, intenta reutilizar el token guardado si tiene menos de 12 horas.
+#' @param client_id ID del cliente OAuth2. Se intenta primero desde `.Renviron`, luego desde `keyring`, y por último del argumento.
+#' @param client_secret Clave secreta OAuth2.
+#' @param guardar Si TRUE, guarda el token generado y las credenciales en `.Renviron` si se pasaron como argumento.
+#' @param usar_cache Si TRUE, reutiliza el token guardado si tiene menos de 12 horas.
+#' @param usar_keyring Si TRUE, intenta recuperar las credenciales desde el sistema seguro de `keyring`.
 #' @return Un objeto de clase `Token2.0` con credenciales OAuth2.
 #' @export
 autenticar_geoportal <- function(client_id = NULL,
                                  client_secret = NULL,
                                  guardar = TRUE,
-                                 usar_cache = TRUE) {
-  
-  # Leer credenciales del entorno o usar argumentos
+                                 usar_cache = TRUE,
+                                 usar_keyring = FALSE) {
+  # 1. Intentar desde .Renviron
   env_client_id <- Sys.getenv("GEOPORTAL3F_CLIENT_ID", unset = NA)
   env_client_secret <- Sys.getenv("GEOPORTAL3F_CLIENT_SECRET", unset = NA)
   
@@ -21,8 +22,24 @@ autenticar_geoportal <- function(client_id = NULL,
       nzchar(env_client_id) && nzchar(env_client_secret)) {
     client_id <- env_client_id
     client_secret <- env_client_secret
-  } else if (!is.null(client_id) && !is.null(client_secret) &&
-             nzchar(client_id) && nzchar(client_secret)) {
+    message("🔐 Credenciales cargadas desde .Renviron.")
+  }
+  
+  # 2. Si se pidió usar keyring
+  else if (usar_keyring) {
+    if (!requireNamespace("keyring", quietly = TRUE)) {
+      stop("📦 El paquete 'keyring' no está instalado. Instalalo o desactivá usar_keyring.")
+    }
+    client_id <- keyring::key_get("geoportal3f_client_id")
+    client_secret <- keyring::key_get("geoportal3f_client_secret")
+    message("🔐 Credenciales cargadas desde keyring.")
+  }
+  
+  # 3. Si se pasaron por argumento
+  else if (!is.null(client_id) && !is.null(client_secret) &&
+           nzchar(client_id) && nzchar(client_secret)) {
+    message("🔐 Credenciales provistas como argumentos.")
+    
     if (guardar) {
       renv_path <- path.expand("~/.Renviron")
       if (file.exists(renv_path)) {
@@ -38,14 +55,17 @@ autenticar_geoportal <- function(client_id = NULL,
       )
       
       writeLines(c(renv_lines, nuevas_lineas), renv_path)
-      message("✅ Credenciales guardadas en .Renviron.")
       readRenviron(renv_path)
+      message("💾 Credenciales guardadas en .Renviron.")
     }
-  } else {
-    stop("❌ No se encontraron credenciales en el entorno ni se pasaron como argumentos.")
   }
   
-  # Intentar cargar token desde cache si tiene menos de 12 horas
+  # 4. Si no hay credenciales válidas en ningún lado
+  else {
+    stop("❌ No se encontraron credenciales válidas. Configurá `.Renviron`, `keyring`, o pasalas como argumentos.")
+  }
+  
+  # Verificar si se puede reutilizar el token
   token_dir <- tools::R_user_dir("geoportal3f", which = "cache")
   if (!dir.exists(token_dir)) dir.create(token_dir, recursive = TRUE)
   cache_path <- file.path(token_dir, "token_geoportal3F.rds")
@@ -65,7 +85,7 @@ autenticar_geoportal <- function(client_id = NULL,
     }
   }
   
-  # OAuth2
+  # OAuth2 Authentication
   endpoint <- httr::oauth_endpoint(
     authorize = "https://geoportal.tresdefebrero.gob.ar/o/authorize/",
     access    = "https://geoportal.tresdefebrero.gob.ar/o/token/"

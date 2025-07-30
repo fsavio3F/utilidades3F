@@ -8,17 +8,20 @@ autenticar_geoportal(
   client_id = NULL,
   client_secret = NULL,
   guardar = TRUE,
-  usar_cache = TRUE
+  usar_cache = TRUE,
+  usar_keyring = FALSE
 )
 }
 \arguments{
-\item{client_id}{ID del cliente OAuth2. Si no está en `.Renviron`, se puede pasar como argumento.}
+\item{client_id}{ID del cliente OAuth2. Se intenta primero desde `.Renviron`, luego desde `keyring`, y por último del argumento.}
 
-\item{client_secret}{Clave secreta OAuth2. Si no está en `.Renviron`, se puede pasar como argumento.}
+\item{client_secret}{Clave secreta OAuth2.}
 
-\item{guardar}{Si TRUE, guarda el token y también las credenciales en `.Renviron` si no están.}
+\item{guardar}{Si TRUE, guarda el token generado y las credenciales en `.Renviron` si se pasaron como argumento.}
 
-\item{usar_cache}{Si TRUE, intenta reutilizar el token guardado si tiene menos de 12 horas.}
+\item{usar_cache}{Si TRUE, reutiliza el token guardado si tiene menos de 12 horas.}
+
+\item{usar_keyring}{Si TRUE, intenta recuperar las credenciales desde el sistema seguro de `keyring`.}
 }
 \value{
 Un objeto de clase `Token2.0` con credenciales OAuth2.

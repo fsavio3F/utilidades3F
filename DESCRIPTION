@@ -25,6 +25,7 @@ Imports:
     ggvis,
     httr,
     jsonlite,
+    keyring,
     ows4R,
     purrr,
     sf,
