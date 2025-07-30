@@ -17,7 +17,6 @@ Collate:
     'actualizar_utilidades3F.R'
     'estructurar_directorio.R'
     'geolocalizar.R'
-    'normalizar_calles.R'
     'normalizar_localidades.R'
     'validar_paquetes.R'
 Imports:

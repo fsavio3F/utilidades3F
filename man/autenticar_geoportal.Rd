@@ -4,14 +4,21 @@
 \alias{autenticar_geoportal}
 \title{autenticar_geoportal}
 \usage{
-autenticar_geoportal(client_id = NULL, client_secret = NULL, guardar = TRUE)
+autenticar_geoportal(
+  client_id = NULL,
+  client_secret = NULL,
+  guardar = TRUE,
+  usar_cache = TRUE
+)
 }
 \arguments{
-\item{client_id}{ID del cliente OAuth2 registrado en el geoportal. No es necesario si el token ya fue guardado previamente.}
+\item{client_id}{ID del cliente OAuth2. Si no está en `.Renviron`, se puede pasar como argumento.}
 
-\item{client_secret}{Clave secreta del cliente OAuth2. No es necesario si el token ya fue guardado previamente.}
+\item{client_secret}{Clave secreta OAuth2. Si no está en `.Renviron`, se puede pasar como argumento.}
 
-\item{guardar}{Si TRUE, guarda el token en un directorio persistente del usuario y lo reutiliza en sesiones siguientes.}
+\item{guardar}{Si TRUE, guarda el token y también las credenciales en `.Renviron` si no están.}
+
+\item{usar_cache}{Si TRUE, intenta reutilizar el token guardado si tiene menos de 12 horas.}
 }
 \value{
 Un objeto de clase `Token2.0` con credenciales OAuth2.
