@@ -1,4 +1,4 @@
-localidades_oc <- dplyr::rename(dplyr::select(obtener_capa("localidades"),c(3,5,6)),localidad_normalizada = nombre)
+localidades_oc <- dplyr::rename(dplyr::select(obtener_capa("localidades"),c("cod_ent","nombre","geometry")),localidad_normalizada = nombre)
 #' obtener_capa
 #'
 #' Permite normalizar y corregir los nombres de las localidades en base a la superposición geométrica
