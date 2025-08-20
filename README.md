@@ -1,6 +1,10 @@
 # **utilidades3F**
 
-**Autor y mantenimiento:** *[Federico Savio](https://github.com/fsavio3F)*.
+**Autores y mantenimiento:**
+
+- *[Federico Savio](https://github.com/fsavio3F)*
+ 
+- *[Agustín Saavedra](https://github.com/agustinSaavedra)*
  
 ## Tabla de contenidos
 
