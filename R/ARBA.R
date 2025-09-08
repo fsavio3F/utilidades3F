@@ -13,7 +13,7 @@ obtener_capa_ARBA <- function(nombre_de_capa){
   codigo_agregacion <- c("110108","070121","110109","110107","110106","110101","110103","110102")
   gz_file <- paste(nombre_de_capa,".gz",sep = "")
   df <- data.frame(agregacion,codigo_agregacion)
-  dir <- "ARBA"
+  dir <- "insumos/ARBA"
   dir.create(dir)
   url <- paste(url_base,df$codigo_agregacion[df$agregacion == nombre_de_capa],"/",sep = "")
   response <- httr::GET(url, httr::write_disk(paste(dir,gz_file, sep = "/"), overwrite = TRUE))
