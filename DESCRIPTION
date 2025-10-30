@@ -19,6 +19,7 @@ Collate:
     'geolocalizar.R'
     'normalizar_localidades.R'
     'validar_paquetes.R'
+    'crear_conexiones.R'
 Imports:
     callr,
     config,

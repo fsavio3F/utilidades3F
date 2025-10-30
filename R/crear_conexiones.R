@@ -29,7 +29,7 @@
 #'
 #' @export
 #' @importFrom DBI dbConnect
-#' @importFrom RPostgres PostgreSQL
+#' @importFrom RPostgres Postgres
 #' @importFrom RMySQL MySQL
 #' @importFrom config get
 crear_conexiones <- function(configs, file = "config.yml") {
@@ -39,7 +39,7 @@ crear_conexiones <- function(configs, file = "config.yml") {
     conf <- config::get(config = config_name, file = file_path)
     
     driver <- switch(conf$db_type,
-      "postgres" = PostgreSQL(),
+      "postgres" = Postgres(),
       "mysql"    = MySQL(),
       stop(paste("db_type desconocido para", config_name)) 
     )
