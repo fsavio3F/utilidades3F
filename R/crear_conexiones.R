@@ -30,7 +30,7 @@
 #' @export
 #' @importFrom DBI dbConnect
 #' @importFrom RPostgres Postgres
-#' @importFrom RMySQL MySQL
+#' @importFrom RMariaDB MariaDB
 #' @importFrom config get
 crear_conexiones <- function(configs, file = "config.yml") {
   
@@ -40,7 +40,7 @@ crear_conexiones <- function(configs, file = "config.yml") {
     
     driver <- switch(conf$db_type,
       "postgres" = Postgres(),
-      "mysql"    = MySQL(),
+      "mysql"    = MariaDB(),
       stop(paste("db_type desconocido para", config_name)) 
     )
     

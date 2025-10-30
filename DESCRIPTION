@@ -20,6 +20,7 @@ Collate:
     'normalizar_localidades.R'
     'validar_paquetes.R'
     'crear_conexiones.R'
+    'configurar_credenciales_db.R'
 Imports:
     callr,
     config,
