@@ -2,6 +2,7 @@
 
 export(actualizar_utilidades3F)
 export(autenticar_geoportal)
+export(configurar_credenciales_db)
 export(crear_conexiones)
 export(estructurar_directorio)
 export(geocodificar_df)

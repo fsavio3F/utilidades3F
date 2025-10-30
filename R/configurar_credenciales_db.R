@@ -5,6 +5,7 @@
 #'
 #' @param nombre_servicio El nombre del servicio (ej. "SSO_vista")
 #'
+#' @export 
 configurar_credenciales_db <- function(nombre_servicio) {
   
   # Verificar que el paquete 'keyring' esté instalado
