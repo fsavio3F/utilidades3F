@@ -4,12 +4,19 @@
 \alias{obtener_capa}
 \title{obtener_capa}
 \usage{
-obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, .interno = FALSE)
+obtener_capa(
+  nombre_de_capa,
+  usar_autenticacion = FALSE,
+  ignorar_SSL = FALSE,
+  .interno = FALSE
+)
 }
 \arguments{
 \item{nombre_de_capa}{Nombre completo o sin prefijo de la capa (por ejemplo: "localidades" o "geonode:localidades").}
 
 \item{usar_autenticacion}{Lógico. Si TRUE, intenta usar el token guardado para autenticarse.}
+
+\item{ignorar_SSL}{Lógico. Si TRUE, desactiva la verificación SSL (solo usar en entornos de desarrollo o servidores internos).}
 
 \item{.interno}{No tocar. Usado internamente para evitar recursión infinita.}
 }

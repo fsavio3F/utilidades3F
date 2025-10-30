@@ -4,11 +4,15 @@
 #'
 #' @param nombre_de_capa Nombre completo o sin prefijo de la capa (por ejemplo: "localidades" o "geonode:localidades").
 #' @param usar_autenticacion Lógico. Si TRUE, intenta usar el token guardado para autenticarse.
+#' @param ignorar_SSL Lógico. Si TRUE, desactiva la verificación SSL (solo usar en entornos de desarrollo o servidores internos).
 #' @param .interno No tocar. Usado internamente para evitar recursión infinita.
 #' @return Un objeto `sf` con los datos espaciales descargados.
 #' @export
-obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = FALSE) {
-  inventario <- obtener_inventario(usar_autenticacion = usar_autenticacion)
+obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, ignorar_SSL = FALSE, .interno = FALSE) {
+  inventario <- tryCatch(
+    obtener_inventario(usar_autenticacion = usar_autenticacion, ignorar_SSL = ignorar_SSL),
+    error = function(e) character(0)
+  )
   
   posibles_nombres <- unique(c(
     nombre_de_capa,
@@ -18,13 +22,14 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
   
   nombre_valido <- intersect(posibles_nombres, inventario)[1]
   
-  if (is.na(nombre_valido)) {
+  if (is.na(nombre_valido) || is.null(nombre_valido)) {
     stop("❌ La capa solicitada no existe en el geoportal. Revisá el nombre o el parámetro 'usar_autenticacion'.")
   }
   
+  # --- Rama sin autenticación (usa callr) ---
   if (!usar_autenticacion && !.interno) {
     return(callr::r(
-      function(nombre) {
+      function(nombre, ignorar_SSL) {
         suppressPackageStartupMessages({
           library(httr)
           library(sf)
@@ -41,7 +46,8 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
           )
         )
         
-        res <- httr::GET(url)
+        cfg <- if (isTRUE(ignorar_SSL)) httr::config(ssl_verifypeer = FALSE) else NULL
+        res <- httr::GET(url, cfg)
         httr::stop_for_status(res)
         
         tmp <- tempfile(fileext = ".geojson")
@@ -55,24 +61,25 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
         
         return(capa)
       },
-      args = list(nombre = nombre_valido),
+      args = list(nombre = nombre_valido, ignorar_SSL = ignorar_SSL),
       show = FALSE
     ))
   }
   
+  # --- Rama autenticada ---
   token_dir <- tools::R_user_dir("geoportal3f", which = "cache")
   cache_path <- file.path(token_dir, "token_geoportal3F.rds")
   
   if (!file.exists(cache_path)) {
     warning("No se encontró token guardado. Se intentará acceso público.")
-    return(obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, .interno = TRUE))
+    return(obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, ignorar_SSL = ignorar_SSL, .interno = TRUE))
   }
   
   token <- tryCatch(readRDS(cache_path), error = function(e) NULL)
   
   if (is.null(token)) {
     warning("⚠️ No se pudo leer el token. Se intentará acceso público.")
-    return(obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, .interno = TRUE))
+    return(obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, ignorar_SSL = ignorar_SSL, .interno = TRUE))
   }
   
   url <- httr::modify_url(
@@ -86,7 +93,13 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, .interno = 
     )
   )
   
-  res <- httr::GET(url, httr::add_headers(Authorization = paste("Bearer", token$credentials$access_token)))
+  cfg <- if (isTRUE(ignorar_SSL)) httr::config(ssl_verifypeer = FALSE) else NULL
+  
+  res <- httr::GET(
+    url,
+    httr::add_headers(Authorization = paste("Bearer", token$credentials$access_token)),
+    cfg
+  )
   httr::stop_for_status(res)
   
   tmp <- tempfile(fileext = ".geojson")

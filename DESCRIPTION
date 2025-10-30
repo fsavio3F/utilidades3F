@@ -21,12 +21,17 @@ Collate:
     'validar_paquetes.R'
 Imports:
     callr,
+    config,
+    DBI,
     dplyr,
     ggvis,
     httr,
     jsonlite,
+    keyring,
     ows4R,
     purrr,
+    RMySQL,
+    RPostgres,
     sf,
     stringi,
     stringr,

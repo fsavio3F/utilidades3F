@@ -7,6 +7,7 @@
 obtener_inventario(
   usar_autenticacion = FALSE,
   limpiar_prefijo = TRUE,
+  ignorar_SSL = FALSE,
   .interno = FALSE
 )
 }
@@ -14,6 +15,8 @@ obtener_inventario(
 \item{usar_autenticacion}{Lógico. Si TRUE, intenta cargar el token guardado del usuario para mostrar capas privadas.}
 
 \item{limpiar_prefijo}{Lógico. Si TRUE, remueve el prefijo "geonode:" de los nombres de capa.}
+
+\item{ignorar_SSL}{Lógico. Si TRUE, desactiva la verificación SSL (solo usar en entornos de desarrollo o servidores internos).}
 
 \item{.interno}{No tocar. Usado internamente para evitar recursión infinita.}
 }

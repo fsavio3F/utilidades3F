@@ -8,7 +8,8 @@ autenticar_geoportal(
   client_id = NULL,
   client_secret = NULL,
   guardar = TRUE,
-  usar_cache = TRUE
+  usar_cache = TRUE,
+  ignorar_SSL = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ autenticar_geoportal(
 \item{guardar}{Si TRUE, guarda el token y también las credenciales en `.Renviron` si no están.}
 
 \item{usar_cache}{Si TRUE, intenta reutilizar el token guardado si tiene menos de 12 horas.}
+
+\item{ignorar_SSL}{Si TRUE, ignora los errores SSL (por ejemplo, certificados vencidos o auto-firmados).}
 }
 \value{
 Un objeto de clase `Token2.0` con credenciales OAuth2.
