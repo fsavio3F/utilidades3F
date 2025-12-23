@@ -22,6 +22,8 @@ Collate:
     'crear_conexiones.R'
     'configurar_credenciales_db.R'
     'ver_tabla.R'
+    'generar_tabla_ipc.R'
+    'pasar_a_terminos_reales.R'
 Imports:
     callr,
     config,
