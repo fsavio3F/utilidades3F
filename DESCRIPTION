@@ -21,6 +21,7 @@ Collate:
     'validar_paquetes.R'
     'crear_conexiones.R'
     'configurar_credenciales_db.R'
+    'ver_tabla.R'
 Imports:
     callr,
     config,
