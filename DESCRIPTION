@@ -24,6 +24,7 @@ Collate:
     'ver_tabla.R'
     'generar_tabla_ipc.R'
     'pasar_a_terminos_reales.R'
+    'configurar_proyecto.R'
 Imports:
     callr,
     config,
