@@ -41,10 +41,10 @@ El paquete `utilidades3F` busca centralizar en un solo lugar un conjunto de func
 - **estructurar_directorio()**: Revisa si existe un proyecto y crea subcarpetas `/insumos` y `/productos` si no están.
 - **configurar_proyecto()**: Permite configurar el directorio de proyecto para faciliar el manejo de versiones.
         La función Permite:
-            - Establecer un nombre de version (Por defecto la fecha de sistema)
-            - Configurar subcarpetas del directorio de proyecto
-            - Seleccionar las carpetas a versionar
-            - Generar una funcion que contenga las rutas relativas para facilitar la lectura y escritura de archivos.
+-           Establecer un nombre de version (Por defecto la fecha de sistema)
+-           Configurar subcarpetas del directorio de proyecto
+-           Seleccionar las carpetas a versionar
+-           Generar una funcion que contenga las rutas relativas para facilitar la lectura y escritura de archivos.
 - **actualizar_utilidades3F()**: Reinstala el paquete desde GitHub. Se puede especificar una rama (por defecto: `estable`).
 
 # **Requisitos**
