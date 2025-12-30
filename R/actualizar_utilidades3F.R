@@ -6,9 +6,6 @@
 #' @param ... Argumentos adicionales que se pasan a `devtools::install_github()`.
 #'
 #' @return Mensaje de instalación o error.
-#' @examples
-#' actualizar_utilidades3F()  # Instala desde rama "estable"
-#' actualizar_utilidades3F(ref = "otra-rama")  # Instala desde una rama alternativa
 #' @export
 actualizar_utilidades3F <- function(ref = "estable", ...) {
   if (!requireNamespace("devtools", quietly = TRUE)) {
