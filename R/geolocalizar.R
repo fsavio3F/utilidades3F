@@ -68,7 +68,9 @@ obtener_direccion_url <- function(lat = NULL, lon = NULL) {
 #' @param street_number_col columna que contenga la altura
 #' @return Devuelve la latitud y longitud expresada en EPSG 4326 además del código postal y la dirección normalizada
 #' @examples
+#' /dontrun{
 #' geolocalizado <- geocodificar_df(df, country_col = 'PAIS', city = 'Tres de Febrero', state = 'Buenos AIres', full_address_col = 'direccion_completa');
+#' }
 #' @export
 
 geocodificar_df <- function(df, country = NULL, country_col = NULL, state = NULL, state_col = NULL, city = NULL, city_col = NULL,
