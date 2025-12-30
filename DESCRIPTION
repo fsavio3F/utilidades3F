@@ -36,6 +36,7 @@ Imports:
     keyring,
     ows4R,
     purrr,
+    remotes,
     RMySQL,
     RPostgres,
     RMariaDB,

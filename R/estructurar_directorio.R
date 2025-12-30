@@ -20,16 +20,16 @@ estructurar_directorio <- function(
     nombre_productos = "productos"
 ) {
   # Función interna: verifica si estás en un proyecto R
-  esta_en_proyecto_r <- function() {
-    proyecto_en_rstudio <- FALSE
-    if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
-      proyecto_en_rstudio <- !is.null(rstudioapi::getActiveProject())
-    }
-    archivos_proyecto <- list.files(getwd(), pattern = "\\.Rproj$|^README\\.md$", ignore.case = TRUE)
-    proyecto_por_archivos <- length(archivos_proyecto) > 0
-    return(proyecto_en_rstudio || proyecto_por_archivos)
+esta_en_proyecto_r <- function() {
+    # Lista de archivos/carpetas que indican la raíz de un proyecto
+    marcadores <- c("\\.Rproj$", "^\\.git$", "^DESCRIPTION$", "^NAMESPACE$", "^README\\.md$")
+    patron_combinado <- paste(marcadores, collapse = "|")
+    
+    # Buscamos si alguno existe en el directorio actual
+    archivos_raiz <- list.files(getwd(), pattern = patron_combinado, all.files = TRUE, ignore.case = TRUE)
+    
+    return(length(archivos_raiz) > 0)
   }
-  
   # Chequeo de proyecto (si está activado)
   if (verificar_proyecto && !esta_en_proyecto_r()) {
     warning("⚠️ No se detectó ningún archivo '.Rproj' ni 'README.md', ni un proyecto activo en RStudio. ¿Estás en la raíz del proyecto?")
