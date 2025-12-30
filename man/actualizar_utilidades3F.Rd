@@ -18,6 +18,8 @@ Mensaje de instalación o error.
 Reinstala el paquete `utilidades3F` desde el repositorio oficial de GitHub.
 }
 \examples{
-actualizar_utilidades3F()  # Instala desde rama "estable"
-actualizar_utilidades3F(ref = "otra-rama")  # Instala desde una rama alternativa
+\dontrun{
+  actualizar_utilidades3F()  # Instala desde rama "estable"
+  actualizar_utilidades3F(ref = "otra-rama") 
+}
 }
