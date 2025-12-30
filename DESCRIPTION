@@ -33,6 +33,7 @@ Imports:
     httr,
     keyring,
     remotes,
+    rlang,
     RPostgres,
     RMariaDB,
     lubridate,
