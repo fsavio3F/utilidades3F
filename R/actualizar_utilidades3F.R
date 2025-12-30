@@ -17,7 +17,7 @@ actualizar_utilidades3F <- function(ref = "estable", ...) {
     stop("Proceso cancelado: devtools no está instalado.")
   }
   
-  repo <- "Datos-3F/utilidades3F"
+  repo <- "fsavio3F/utilidades3F"
   message("⬇️ Instalando utilidades3F desde GitHub: ", repo, " (ref: ", ref, ")...")
   
   tryCatch(
