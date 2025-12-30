@@ -1,28 +1,28 @@
-#' Configurar estructura y exportar función de guardado
+#' Configurar estructura y exportar funci\u00f3n de guardado
 #'
-#' Crea directorios y "inyecta" la función de guardado directamente en el entorno
+#' Crea directorios e "inyecta" la funci\u00f3n de guardado directamente en el entorno
 #' de trabajo para no tener que asignarla manualmente.
 #'
 #' @param version String. Identificador (ej. "20251229").
 #' @param categorias Vector. Carpetas del proyecto.
 #' @param versionar Vector. Carpetas que llevan subcarpeta de fecha.
-#' @param ruta_base String. Ruta raíz.
-#' @param nombre_funcion String o NULL. Nombre con el que se creará la función en el entorno global.
-#'        Si es NULL, la función solo retorna el closure y no crea nada en el entorno.
+#' @param ruta_base String. Ruta ra\u00edz.
+#' @param nombre_funcion String o NULL. Nombre con el que se crear\u00e1 la funci\u00f3n en el entorno global.
+#'        Si es NULL, la funci\u00f3n solo retorna el closure y no crea nada en el entorno.
 #'
-#' @return Invisible. Retorna la función constructora (closure) silenciosamente.
+#' @return Invisible. Retorna la funci\u00f3n constructora (closure) silenciosamente.
 #' @export
 configurar_proyecto <- function(
     version = format(Sys.Date(), "%Y%m%d"),
     categorias = c("insumos", "productos"),
     versionar = NULL, 
     ruta_base = getwd(),
-    nombre_funcion = "dir_guardado" # <--- Nuevo parámetro
+    nombre_funcion = "dir_guardado" 
 ) {
   
-  # 1. Crear estructura física (Sin cambios en tu lógica)
+  # 1. Crear estructura f\u00edsica
   if (!is.null(versionar) && !all(versionar %in% categorias)) {
-    warning("⚠️ Atención: Hay carpetas en 'versionar' que no están en 'categorias'.")
+    warning("[!] Atenci\u00f3n: Hay carpetas en 'versionar' que no est\u00e1n en 'categorias'.")
   }
 
   mapa_rutas <- list()
@@ -36,16 +36,16 @@ configurar_proyecto <- function(
     
     if (!dir.exists(ruta_real)) {
       dir.create(ruta_real, recursive = TRUE)
-      tipo <- if (cat %in% versionar) "(Versionado)" else "(Estático)"
-      message("✅ Creado ", tipo, ": ", ruta_real)
+      tipo <- if (cat %in% versionar) "(Versionado)" else "(Est\u00e1tico)"
+      message("[OK] Creado ", tipo, ": ", ruta_real)
     }
     mapa_rutas[[cat]] <- ruta_real
   }
   
-  # 2. Definir el closure (Sin cambios en tu lógica)
+  # 2. Definir el closure
   dir_guardado_fn <- function(nombre, ext = NULL, directorio = "productos", sufijo = TRUE) {
     if (is.null(mapa_rutas[[directorio]])) {
-      stop("❌ El directorio '", directorio, "' no está configurado.")
+      stop("[Error] El directorio '", directorio, "' no est\u00e1 configurado.")
     }
     
     nombre_base <- if (sufijo) paste0(nombre, "_", version) else nombre
@@ -59,13 +59,11 @@ configurar_proyecto <- function(
     return(file.path(mapa_rutas[[directorio]], nombre_final))
   }
   
-  # Exporta la funcon de directorio de guardado al entorno global si se especifica un nombre
+  # Exporta la funcion de directorio de guardado al entorno global si se especifica un nombre
   if (!is.null(nombre_funcion)) {
-    # .GlobalEnv asegura que esté disponible en tu sesión
     assign(nombre_funcion, dir_guardado_fn, envir = .GlobalEnv)
-    message("✨ Función '", nombre_funcion, "()' lista para usar.")
+    message("[*] Funci\u00f3n '", nombre_funcion, "()' lista para usar.")
   }
   
-  # Retornamos invisible para que no imprima el código de la función en consola
   return(invisible(dir_guardado_fn))
 }

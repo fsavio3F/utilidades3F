@@ -1,13 +1,13 @@
 #' Generar tabla de factores de ajuste IPC
 #'
-#' Descarga la serie histórica del IPC (Nivel General Nacional) desde el INDEC,
-#' completa los meses faltantes hasta la actualidad proyectando el último valor
+#' Descarga la serie hist\u00f3rica del IPC (Nivel General Nacional) desde el INDEC,
+#' completa los meses faltantes hasta la actualidad proyectando el \u00faltimo valor
 #' y calcula los coeficientes de ajuste respecto a un mes base.
 #'
-#' @param mes_base Carácter con formato "YYYY-MM" o el string "ult_disponible".
-#'   Indica el mes en el que el coeficiente será 1. Si es \code{NULL}, devuelve la serie cruda.
+#' @param mes_base Car\u00e1cter con formato "YYYY-MM" o el string "ult_disponible".
+#'   Indica el mes en el que el coeficiente ser\u00e1 1. Si es \code{NULL}, devuelve la serie cruda.
 #'
-#' @return Un data.frame con columnas \code{indice_tiempo} (Date) y \code{valor_ipc} (numérico).
+#' @return Un data.frame con columnas \code{indice_tiempo} (Date) y \code{valor_ipc} (num\u00e9rico).
 #' @export
 #' @importFrom dplyr filter mutate select %>%
 #' @importFrom lubridate ymd %m+% floor_date as_date
@@ -23,7 +23,6 @@ generar_tabla_ipc <- function(mes_base = "ult_disponible") {
     stop("Error al descargar o leer datos del INDEC.")
   })
 
-  # CORRECCIÓN: Quitada la doble coma y agregados los .data$ faltantes
   tabla_ipc <- tabla_ipc %>%
     dplyr::filter(.data$Descripcion == "NIVEL GENERAL", .data$Region == "Nacional") %>%
     dplyr::mutate(indice_tiempo = lubridate::ymd(paste0(.data$Periodo, "01"))) %>%
@@ -38,7 +37,7 @@ generar_tabla_ipc <- function(mes_base = "ult_disponible") {
     mes_base_date <- max(tabla_ipc$indice_tiempo, na.rm = TRUE)
   } else {
     mes_base_date <- lubridate::as_date(paste0(mes_base, "-01"))
-    if (is.na(mes_base_date)) stop("Formato de mes_base inválido. Use 'YYYY-MM'.")
+    if (is.na(mes_base_date)) stop("Formato de mes_base inv\u00e1lido. Use 'YYYY-MM'.")
   }
 
   # Proyectar meses faltantes
@@ -64,7 +63,6 @@ generar_tabla_ipc <- function(mes_base = "ult_disponible") {
     stop("El mes base seleccionado no existe en la serie disponible.")
   }
 
-  # CORRECCIÓN: Agregado .data$ al cálculo final
   tabla_ipc %>%
     dplyr::mutate(valor_ipc = (.data$ipc_nivel_general_nacional / 100) / (ipc_base_val / 100)) %>%
     dplyr::select(.data$indice_tiempo, .data$valor_ipc)
