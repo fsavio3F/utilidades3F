@@ -4,6 +4,7 @@
 #' en caso de no estar instalados, se instalan
 #' @param paquetes vector con los paquetes a instalar
 #' @examples
+#' paquetes <- c("sf")
 #' validar_paquetes(paquetes);
 #' @export
 validar_paquetes <- function(paquetes) {

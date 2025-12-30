@@ -14,5 +14,6 @@ permite validar si los paquetes necesarios en un script se encuentran instalados
 en caso de no estar instalados, se instalan
 }
 \examples{
+paquetes <- c("sf")
 validar_paquetes(paquetes);
 }
