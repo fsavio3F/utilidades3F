@@ -13,10 +13,7 @@ obtener_inventario <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRU
   if (!usar_autenticacion && !.interno) {
     return(callr::r(
       function(limpiar_prefijo, ignorar_SSL) {
-        suppressPackageStartupMessages({
-          library(httr)
-          library(xml2)
-        })
+        # CORRECCIÓN: Eliminado suppressPackageStartupMessages y library()
         
         cfg <- if (isTRUE(ignorar_SSL)) httr::config(ssl_verifypeer = FALSE) else NULL
         

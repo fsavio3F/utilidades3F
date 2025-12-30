@@ -16,5 +16,7 @@ devuelve la capa deseada, en caso de no conocer el nombre utilizar la función d
 obtener_capa_ARBA
 }
 \examples{
+\dontrun{
 capa <- obtener_capa_ARBA(nombre_de_capa = "Parcela");
+}
 }

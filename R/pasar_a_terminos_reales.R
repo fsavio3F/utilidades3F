@@ -14,6 +14,7 @@
 #' @importFrom dplyr left_join filter pull first %>%
 #' @importFrom stringr str_detect
 #' @importFrom lubridate as_date floor_date
+#' @importFrom rlang .data
 pasar_a_terminos_reales <- function(df, col_fecha, col_valor, tabla_ipc) {
 
   # Validación básica de input
@@ -25,9 +26,7 @@ pasar_a_terminos_reales <- function(df, col_fecha, col_valor, tabla_ipc) {
   na_ini_fecha <- sum(is.na(df[[col_fecha]]))
   na_ini_valor <- sum(is.na(df[[col_valor]]))
 
-  # Forzamos conversión para evitar errores en joins o cálculos
   df[[col_fecha]] <- as.character(df[[col_fecha]])
-  # Nota: as.numeric fallará si los decimales usan coma y el sistema espera punto.
   df[[col_valor]] <- suppressWarnings(as.numeric(df[[col_valor]]))
 
   na_fin_fecha <- sum(is.na(df[[col_fecha]]))
@@ -41,22 +40,21 @@ pasar_a_terminos_reales <- function(df, col_fecha, col_valor, tabla_ipc) {
   }
 
   # 2. Obtener Mes Base de la tabla IPC (donde coeficiente == 1)
+  # CORRECCIÓN: Agregar .data$ para evitar NOTE de variable global
   mes_base <- tabla_ipc %>%
-    dplyr::filter(valor_ipc == 1) %>%
-    dplyr::pull(indice_tiempo) %>%
+    dplyr::filter(.data$valor_ipc == 1) %>%
+    dplyr::pull(.data$indice_tiempo) %>%
     dplyr::first()
 
   if (length(mes_base) == 0) warning("No se detectó un mes base con valor_ipc == 1 en la tabla provista.")
 
   # 3. Normalización de fechas para el join
-  # Detectamos formato "YYYY-MM" y agregamos "-01", sino parseamos directo.
   fechas_temp <- df[[col_fecha]]
   es_formato_ym <- stringr::str_detect(fechas_temp, "^\\d{4}-\\d{2}$")
-  es_formato_ym[is.na(es_formato_ym)] <- FALSE # Manejo de NAs en str_detect
+  es_formato_ym[is.na(es_formato_ym)] <- FALSE
 
   fechas_temp[es_formato_ym] <- paste0(fechas_temp[es_formato_ym], "-01")
 
-  # Creamos columna auxiliar segura (siempre primer día del mes)
   df$aux_fecha_join <- lubridate::floor_date(lubridate::as_date(fechas_temp), "month")
 
   # 4. Join y Cálculo
@@ -65,7 +63,6 @@ pasar_a_terminos_reales <- function(df, col_fecha, col_valor, tabla_ipc) {
   sufijo <- "_tr"
   var_treales <- paste0(col_valor, sufijo)
 
-  # Cálculo vectorizado
   df[[var_treales]] <- round(df[[col_valor]] / df$valor_ipc, 2)
 
   # 5. Reporte y Limpieza

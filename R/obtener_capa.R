@@ -30,10 +30,8 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, ignorar_SSL
   if (!usar_autenticacion && !.interno) {
     return(callr::r(
       function(nombre, ignorar_SSL) {
-        suppressPackageStartupMessages({
-          library(httr)
-          library(sf)
-        })
+        # CORRECCIÓN: Borrado suppressPackageStartupMessages y library()
+        # Las funciones ya usan httr:: y sf:: explícitamente
         
         url <- httr::modify_url(
           url = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",

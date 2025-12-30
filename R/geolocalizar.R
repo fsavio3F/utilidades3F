@@ -1,13 +1,8 @@
-
-
 DOMAIN_URL <- 'http://localhost:8080'
-
 
 request_requests_json <- function(url_prefix, params) {
   res <- httr::GET(url_prefix, query = params)
   httr::content(res, type = "application/json")
-  # content(res, as = "text") %>%
-  # fromJSON(flatten = TRUE)
 }
 
 obtener_coordenadas_url <- function(country = NULL, state = NULL, city = NULL,
@@ -29,14 +24,15 @@ obtener_coordenadas_url <- function(country = NULL, state = NULL, city = NULL,
 obtener_coordenadas <- function(country = NULL, state = NULL, city = NULL,
                             street = NULL, postalcode = NULL) {
   url <- obtener_coordenadas_url(country, state, city, street, postalcode)
-  coordinates <- request_requests_json(url=url$url_prefix, params = url$params)
+  
+  # CORRECCIÓN: 'url_prefix =' en lugar de 'url =' para evitar partial match
+  coordinates <- request_requests_json(url_prefix = url$url_prefix, params = url$params)
+  
   tryCatch(
     coordinates[[1]],
-    # coordinates[1,],
     error = function(e) NULL
   )
 }
-
 
 obtener_direccion_url <- function(lat = NULL, lon = NULL) {
   params <- list()
@@ -48,8 +44,6 @@ obtener_direccion_url <- function(lat = NULL, lon = NULL) {
   
   return(list(url_prefix = url_prefix, params = params))
 }
-
-
 
 #' geocodificar_df
 #'
@@ -72,12 +66,9 @@ obtener_direccion_url <- function(lat = NULL, lon = NULL) {
 #' geolocalizado <- geocodificar_df(df, country_col = 'PAIS', city = 'Tres de Febrero', state = 'Buenos AIres', full_address_col = 'direccion_completa');
 #' }
 #' @export
-
 geocodificar_df <- function(df, country = NULL, country_col = NULL, state = NULL, state_col = NULL, city = NULL, city_col = NULL,
                        postalcode = NULL, postalcode_col = NULL, full_address_col = NULL, street_name_col = NULL,
                        street_number_col = NULL) {
-
-  # browser()
 
   if (!is.null(country) && !is.null(country_col)) {
     stop("Only one of 'country' and 'country_col' should be provided.")
