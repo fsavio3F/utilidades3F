@@ -38,6 +38,8 @@ Imports:
     purrr,
     RMySQL,
     RPostgres,
+    RMariaDB,
+    lubridate,
     sf,
     stringi,
     stringr,
