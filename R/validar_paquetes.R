@@ -1,24 +1,30 @@
-#' validar_paquetes
+#' Validar e instalar paquetes necesarios
 #'
-#' permite validar si los paquetes necesarios en un script se encuentran instalados
-#' en caso de no estar instalados, se instalan
-#' @param paquetes vector con los paquetes a instalar
+#' Verifica si una lista de paquetes está instalada. Si alguno falta, lo instala automáticamente.
+#' Finalmente, carga los paquetes en la sesión actual.
+#'
+#' @param paquetes Vector de caracteres con los nombres de los paquetes.
 #' @examples
-#' paquetes <- c("sf")
-#' validar_paquetes(paquetes);
+#' \dontrun{
+#'   validar_paquetes(c("dplyr", "sf"))
+#' }
 #' @export
 validar_paquetes <- function(paquetes) {
-  for (i in paquetes) {
-    if (!requireNamespace(i, quietly = TRUE)) {
-      cat(i, "no está instalado \n")
-      install.packages(i)
+  for (pkg in paquetes) {
+    if (!requireNamespace(pkg, quietly = TRUE)) {
+      message("📦 El paquete '", pkg, "' no está instalado. Instalando...")
+      
+      # Usamos utils:: explícitamente para calmar al R CMD check
+      utils::install.packages(pkg)
+      
+      if (!requireNamespace(pkg, quietly = TRUE)) {
+        warning("⚠️ No se pudo instalar el paquete: ", pkg)
+        next
+      }
     } else {
-      cat(i, "está instalado \n")
+      message("✅ '", pkg, "' ya está instalado.")
     }
     
-    library(i, character.only = TRUE)
+    library(pkg, character.only = TRUE)
   }
-  # borrar el listado de paquetes
-  rm(paquetes)
 }
-

@@ -1,11 +1,11 @@
 Package: utilidades3F
 Type: Package
-Title: Funciones útiles para 3F(utilidades3F)
-Version: 0.1.1
+Title: Funciones útiles para 3F (utilidades3F)
+Version: 0.1.2
 Author: Federico Savio
 Maintainer: Federico Savio <fsavio.3f@gmail.com>
 Description: Este paquete contiene distintas funciones de uso frecuente dentro del Departamento de Datos de la Municipalidad de Tres de Febrero.
-License: UWU
+License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
@@ -30,20 +30,16 @@ Imports:
     config,
     DBI,
     dplyr,
-    ggvis,
     httr,
-    jsonlite,
     keyring,
-    ows4R,
-    purrr,
     remotes,
-    RMySQL,
     RPostgres,
     RMariaDB,
     lubridate,
     sf,
-    stringi,
     stringr,
-    xml2
+    xml2,
+    utils
 Suggests:
-    devtools
+    devtools,
+    rstudioapi

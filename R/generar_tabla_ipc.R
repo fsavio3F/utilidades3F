@@ -12,6 +12,7 @@
 #' @importFrom dplyr filter mutate select %>%
 #' @importFrom lubridate ymd %m+% floor_date as_date
 #' @importFrom utils read.csv2 tail
+#' @importFrom rlang .data
 generar_tabla_ipc <- function(mes_base = "ult_disponible") {
 
   url <- "https://www.indec.gob.ar/ftp/cuadros/economia/serie_ipc_divisiones.csv"
@@ -22,10 +23,11 @@ generar_tabla_ipc <- function(mes_base = "ult_disponible") {
     stop("Error al descargar o leer datos del INDEC.")
   })
 
+  # CORRECCIÓN: Quitada la doble coma y agregados los .data$ faltantes
   tabla_ipc <- tabla_ipc %>%
-    dplyr::filter(Descripcion == "NIVEL GENERAL", Region == "Nacional") %>%
-    dplyr::mutate(indice_tiempo = lubridate::ymd(paste0(Periodo, "01"))) %>%
-    dplyr::select(indice_tiempo, ipc_nivel_general_nacional = Indice_IPC)
+    dplyr::filter(.data$Descripcion == "NIVEL GENERAL", .data$Region == "Nacional") %>%
+    dplyr::mutate(indice_tiempo = lubridate::ymd(paste0(.data$Periodo, "01"))) %>%
+    dplyr::select(indice_tiempo = .data$indice_tiempo, ipc_nivel_general_nacional = .data$Indice_IPC)
 
   if (is.null(mes_base)) {
     return(tabla_ipc)
@@ -62,7 +64,8 @@ generar_tabla_ipc <- function(mes_base = "ult_disponible") {
     stop("El mes base seleccionado no existe en la serie disponible.")
   }
 
+  # CORRECCIÓN: Agregado .data$ al cálculo final
   tabla_ipc %>%
-    dplyr::mutate(valor_ipc = (ipc_nivel_general_nacional / 100) / (ipc_base_val / 100)) %>%
-    dplyr::select(indice_tiempo, valor_ipc)
+    dplyr::mutate(valor_ipc = (.data$ipc_nivel_general_nacional / 100) / (ipc_base_val / 100)) %>%
+    dplyr::select(.data$indice_tiempo, .data$valor_ipc)
 }

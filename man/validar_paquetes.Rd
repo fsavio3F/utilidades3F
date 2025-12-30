@@ -2,18 +2,19 @@
 % Please edit documentation in R/validar_paquetes.R
 \name{validar_paquetes}
 \alias{validar_paquetes}
-\title{validar_paquetes}
+\title{Validar e instalar paquetes necesarios}
 \usage{
 validar_paquetes(paquetes)
 }
 \arguments{
-\item{paquetes}{vector con los paquetes a instalar}
+\item{paquetes}{Vector de caracteres con los nombres de los paquetes.}
 }
 \description{
-permite validar si los paquetes necesarios en un script se encuentran instalados
-en caso de no estar instalados, se instalan
+Verifica si una lista de paquetes está instalada. Si alguno falta, lo instala automáticamente.
+Finalmente, carga los paquetes en la sesión actual.
 }
 \examples{
-paquetes <- c("sf")
-validar_paquetes(paquetes);
+\dontrun{
+  validar_paquetes(c("dplyr", "sf"))
+}
 }
