@@ -23,15 +23,13 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, ignorar_SSL
   nombre_valido <- intersect(posibles_nombres, inventario)[1]
   
   if (is.na(nombre_valido) || is.null(nombre_valido)) {
-    stop("❌ La capa solicitada no existe en el geoportal. Revisá el nombre o el parámetro 'usar_autenticacion'.")
+    stop("[ERROR] La capa solicitada no existe. Revis\u00e1 el nombre o el par\u00e1metro 'usar_autenticacion'.")
   }
   
   # --- Rama sin autenticación (usa callr) ---
   if (!usar_autenticacion && !.interno) {
     return(callr::r(
       function(nombre, ignorar_SSL) {
-        # CORRECCIÓN: Borrado suppressPackageStartupMessages y library()
-        # Las funciones ya usan httr:: y sf:: explícitamente
         
         url <- httr::modify_url(
           url = "https://geoportal.tresdefebrero.gob.ar/geoserver/ows",
@@ -54,7 +52,7 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, ignorar_SSL
         capa <- tryCatch({
           sf::read_sf(tmp) |> sf::st_transform(crs = 4326)
         }, error = function(e) {
-          stop("❌ La capa solicitada no está disponible públicamente o la respuesta no es válida.")
+          stop("La capa no est\u00e1 disponible p\u00fablicamente o la respuesta no es v\u00e1lida.")
         })
         
         return(capa)
@@ -69,14 +67,14 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, ignorar_SSL
   cache_path <- file.path(token_dir, "token_geoportal3F.rds")
   
   if (!file.exists(cache_path)) {
-    warning("No se encontró token guardado. Se intentará acceso público.")
+    warning("No se encontr\u00f3 token. Se intentar\u00e1 acceso p\u00fablico.")
     return(obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, ignorar_SSL = ignorar_SSL, .interno = TRUE))
   }
   
   token <- tryCatch(readRDS(cache_path), error = function(e) NULL)
   
   if (is.null(token)) {
-    warning("⚠️ No se pudo leer el token. Se intentará acceso público.")
+    warning("[!] No se pudo leer el token. Se intentar\u00e1 acceso p\u00fablico.")
     return(obtener_capa(nombre_de_capa, usar_autenticacion = FALSE, ignorar_SSL = ignorar_SSL, .interno = TRUE))
   }
   
@@ -106,7 +104,7 @@ obtener_capa <- function(nombre_de_capa, usar_autenticacion = FALSE, ignorar_SSL
   capa <- tryCatch({
     sf::read_sf(tmp) |> sf::st_transform(crs = 4326)
   }, error = function(e) {
-    stop("❌ La capa solicitada no pudo ser cargada. Verificá permisos y formato.")
+    stop("[ERROR] La capa no pudo ser cargada. Verific\u00e1 permisos y formato.")
   })
   
   return(capa)

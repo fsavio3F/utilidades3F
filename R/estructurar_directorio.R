@@ -32,9 +32,9 @@ esta_en_proyecto_r <- function() {
   }
   # Chequeo de proyecto (si está activado)
   if (verificar_proyecto && !esta_en_proyecto_r()) {
-    warning("⚠️ No se detectó ningún archivo '.Rproj' ni 'README.md', ni un proyecto activo en RStudio. ¿Estás en la raíz del proyecto?")
+    warning("[!] No se detect\u00f3 ning\u00fan archivo '.Rproj' ni 'README.md'. \u00bfEst\u00e1s en la ra\u00edz?")
   } else if (verificar_proyecto) {
-    message("📁 Proyecto detectado correctamente en el directorio actual.")
+    message("[OK] Proyecto detectado correctamente.")
   }
   
   # Lista de directorios a crear, según parámetros
@@ -44,9 +44,9 @@ esta_en_proyecto_r <- function() {
     ruta <- file.path(getwd(), nombre)
     if (!dir.exists(ruta)) {
       dir.create(ruta, recursive = TRUE)
-      message("✅ Se creó el directorio: '", nombre, "'.")
+      message("[+] Se cre\u00f3 el directorio: '", nombre, "'.")
     } else {
-      message("✔️ El directorio ya existe: '", nombre, "'.")
+      message("[v] El directorio ya existe: '", nombre, "'.")
     }
   }))
 }

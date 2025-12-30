@@ -19,12 +19,9 @@ obtener_capa_ARBA <- function(nombre_de_capa){
   if(!dir.exists(dir)) dir.create(dir, recursive = TRUE)
   url <- paste(url_base,df$codigo_agregacion[df$agregacion == nombre_de_capa],"/",sep = "")
   
-  # Usar tryCatch o verificar respuesta sería ideal, pero por ahora mantenemos estructura
   httr::GET(url, httr::write_disk(paste(dir,gz_file, sep = "/"), overwrite = TRUE))
   
-  # CORRECCIÓN: utils::untar
   utils::untar(paste(dir, gz_file, sep="/"), exdir = dir)
-  
   shapefile_path <- list.files(dir, pattern = "\\.shp$", full.names = TRUE)
   print(paste0("Descargando '", nombre_de_capa, "' del URL: '", url, "'"))
   capa_prov <- sf::read_sf(shapefile_path)
@@ -46,15 +43,18 @@ obtener_capa_ARBA <- function(nombre_de_capa){
 #' @export
 inventario_ARBA<- function() {
   nombre_capa<- c("Subparcela","Departamento","Medida Lado","Circunscripcion","Fraccion","Parcela","Seccion Catastral","Manzana")
-  descripcion <- c("La propiedad de la unidad funcional o subparcela comprende la parte indivisa del terreno, de las cosas y partes de uso común del inmueble o indispensables para mantener su seguridad, y puede abarcar una o más unidades complementarias destinadas a servirla.",
-                   "División político administrativa de segundo orden. Incluye partido y comuna.",
-                   "Valor numérico del lado de un polígono referido a un objeto catastral y que representa su longitud.",
-                   "El Departamento (Partido) se dividirá en circunscripciones, pudiendo contener en conjunto o separadamente plantas urbanas, suburbanas y rurales.",
-                   "No tienen especificaciones de ningún tipo dentro de la Ley 10707, es por ello que podemos encontrarlas como macizos puros, o como subdivisiones de algún macizo puro.",
-                   "Se denomina parcela a la cosa inmueble de extensión territorial continua, deslindado por una poligonal cerrada, perteneciente a un propietario o a varios en condominio, o poseído por una persona o por varias en común, cuya existencia y elementos esenciales consten en un plano registrado en el organismo catastral.",
-                   "Las plantas urbanas y suburbanas se dividirán en secciones llevando sus límites por calles, si es posible principales o avenidas y a falta de calles por un deslinde inconfundible de propiedad, no debiendo contener en general cada sección urbana un número mayor de cien manzanas.",
-                   "Extensión de territorio cuya superficie no debe exceder las 1.5 hectáreas y están totalmente rodeadas de vías de comunicación.")
+  
+  # Textos escapados a Unicode
+  descripcion <- c(
+    "La propiedad de la unidad funcional o subparcela comprende la parte indivisa del terreno, de las cosas y partes de uso com\u00fan del inmueble o indispensables para mantener su seguridad, y puede abarcar una o m\u00e1s unidades complementarias destinadas a servirla.",
+    "Divisi\u00f3n pol\u00edtico administrativa de segundo orden. Incluye partido y comuna.",
+    "Valor num\u00e9rico del lado de un pol\u00edgono referido a un objeto catastral y que representa su longitud.",
+    "El Departamento (Partido) se dividir\u00e1 en circunscripciones, pudiendo contener en conjunto o separadamente plantas urbanas, suburbanas y rurales.",
+    "No tienen especificaciones de ning\u00fan tipo dentro de la Ley 10707, es por ello que podemos encontrarlas como macizos puros, o como subdivisiones de alg\u00fan macizo puro.",
+    "Se denomina parcela a la cosa inmueble de extensi\u00f3n territorial continua, deslindado por una poligonal cerrada, perteneciente a un propietario o a varios en condominio, o pose\u00eddo por una persona o por varias en com\u00fan, cuya existencia y elementos esenciales consten en un plano registrado en el organismo catastral.",
+    "Las plantas urbanas y suburbanas se dividir\u00e1n en secciones llevando sus l\u00edmites por calles, si es posible principales o avenidas y a falta de calles por un deslinde inconfundible de propiedad, no debiendo contener en general cada secci\u00f3n urbana un n\u00famero mayor de cien manzanas.",
+    "Extensi\u00f3n de territorio cuya superficie no debe exceder las 1.5 hect\u00e1reas y est\u00e1n totalmente rodeadas de v\u00edas de comunicaci\u00f3n."
+  )
   inventario <- data.frame(nombre_capa,descripcion)
-  # CORRECCIÓN: utils::View
   return(utils::View(inventario))
 }
