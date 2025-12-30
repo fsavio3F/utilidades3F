@@ -4,7 +4,11 @@
 #'
 #' @param ref Rama o tag a instalar. Por defecto usa "estable".
 #' @param ... Argumentos adicionales que se pasan a `devtools::install_github()`.
-#'
+#' @examples
+#' \dontrun{
+#'   actualizar_utilidades3F()  # Instala desde rama "estable"
+#'   actualizar_utilidades3F(ref = "otra-rama") 
+#' }
 #' @return Mensaje de instalación o error.
 #' @export
 actualizar_utilidades3F <- function(ref = "estable", ...) {
