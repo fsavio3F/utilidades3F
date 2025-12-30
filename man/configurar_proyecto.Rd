@@ -2,29 +2,32 @@
 % Please edit documentation in R/configurar_proyecto.R
 \name{configurar_proyecto}
 \alias{configurar_proyecto}
-\title{Configurar estructura selectiva y obtener función de guardado}
+\title{Configurar estructura y exportar función de guardado}
 \usage{
 configurar_proyecto(
   version = format(Sys.Date(), "\%Y\%m\%d"),
   categorias = c("insumos", "productos"),
   versionar = NULL,
-  ruta_base = getwd()
+  ruta_base = getwd(),
+  nombre_funcion = "dir_guardado"
 )
 }
 \arguments{
-\item{version}{String. Identificador de la versión (ej. fecha "20251229").}
+\item{version}{String. Identificador (ej. "20251229").}
 
-\item{categorias}{Vector. Todas las carpetas que necesita el proyecto.}
+\item{categorias}{Vector. Carpetas del proyecto.}
 
-\item{versionar}{Vector. Subconjunto de 'categorias' que llevarán subcarpeta interna con la fecha.}
+\item{versionar}{Vector. Carpetas que llevan subcarpeta de fecha.}
 
-\item{ruta_base}{String. Ruta raíz del proyecto.}
+\item{ruta_base}{String. Ruta raíz.}
+
+\item{nombre_funcion}{String o NULL. Nombre con el que se creará la función en el entorno global.
+Si es NULL, la función solo retorna el closure y no crea nada en el entorno.}
 }
 \value{
-Una función (closure) `dir_guardado(archivo, directorio, ...)`
+Invisible. Retorna la función constructora (closure) silenciosamente.
 }
 \description{
-Crea la estructura de directorios. Permite mezclar carpetas estáticas (sin fecha)
-con carpetas versionadas (con subcarpeta de fecha). Devuelve una función para
-generar rutas de archivos que respetan esa estructura automáticamente.
+Crea directorios y "inyecta" la función de guardado directamente en el entorno
+de trabajo para no tener que asignarla manualmente.
 }
