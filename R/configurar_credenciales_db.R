@@ -20,6 +20,16 @@ configurar_credenciales_db <- function(nombre_servicio,
   if (!requireNamespace("keyring", quietly = TRUE)) {
     stop("El paquete 'keyring' es necesario.")
   }
+
+  if (!is.null(db_type)) {
+    tipos_validos <- c("sqlserver", "postgres", "mysql")
+    if (!tolower(db_type) %in% tipos_validos) {
+      stop(sprintf(
+        "Error: db_type '%s' no es v\u00e1lido.\nOpciones permitidas: %s", 
+        db_type, paste(tipos_validos, collapse = ", ")
+      ))
+    }
+  }
   
   message(sprintf("--- Configurando: %s ---", nombre_servicio))
   
@@ -124,9 +134,9 @@ configurar_credenciales_db <- function(nombre_servicio,
     )
     
     # hacemos append al archivo
-    cat(paste(bloque, collapse = "\n"), file = file, append = TRUE)
-    message(sprintf("[OK] Configuraci\u00f3n actualizada en %s.", file))
-    
+    texto_a_escribir <- paste0("\n", paste(bloque, collapse = "\n"))
+    cat(texto_a_escribir, file = file, append = TRUE)
+    message(sprintf("[OK] Configuración actualizada en %s.", file))
   } else {
     message("\n[Info] Credenciales actualizadas correctamente. No se modific\u00f3 el YAML (faltan par\u00e1metros de conexi\u00f3n).")
   }
