@@ -134,7 +134,7 @@ configurar_credenciales_db <- function(nombre_servicio,
     )
     
     # hacemos append al archivo
-    texto_a_escribir <- paste0("\n", paste(bloque, collapse = "\n"))
+    texto_a_escribir <- paste0("\n", paste(bloque, collapse = "\n"), "\n")
     cat(texto_a_escribir, file = file, append = TRUE)
     message(sprintf("[OK] Configuración actualizada en %s.", file))
   } else {
