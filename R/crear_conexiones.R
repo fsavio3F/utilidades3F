@@ -4,29 +4,10 @@
 #' una lista nombrada de conexiones DBI.
 #'
 #' @param configs Un vector de caracteres con los nombres de las
-#'   configuraciones a cargar (ej: `"SSO_vista"` o `c("SSO_vista", "otra_db")`).
-#' @param file La ruta al archivo de configuración. Por defecto, busca
-#'   un archivo "config.yml" en el directorio de trabajo actual.
+#'   configuraciones a cargar.
+#' @param file La ruta al archivo de configuración. Por defecto "config.yml".
 #'
 #' @return Una lista nombrada, donde cada elemento es un objeto `DBIConnection`.
-#'
-#' @examples
-#' \dontrun{
-#'   # --- Ejemplo con una sola conexión ---
-#'   con <- crear_conexiones("produccion")
-#'   # Se accede así:
-#'   DBI::dbListTables(con$produccion)
-#'
-#'   # --- Ejemplo con múltiples conexiones ---
-#'   conns <- crear_conexiones(
-#'     configs = c("produccion", "testing"),
-#'     file = "D:/Mis cosas/Credenciales/config.yml"
-#'   )
-#'   # Se accede de la misma forma:
-#'   DBI::dbListTables(conns$produccion)
-#'   DBI::dbListTables(conns$testing)
-#' }
-#'
 #' @export
 #' @importFrom DBI dbConnect
 #' @importFrom RPostgres Postgres
@@ -34,33 +15,53 @@
 #' @importFrom config get
 crear_conexiones <- function(configs, file = "config.yml") {
   
-  # La función interna para manejar una sola config
   .crear_una_conexion <- function(config_name, file_path) {
     conf <- config::get(config = config_name, file = file_path)
+    tipo_db <- tolower(conf$db_type)
     
-    driver <- switch(conf$db_type,
-      "postgres" = Postgres(),
-      "mysql"    = MariaDB(),
-      stop(paste("db_type desconocido para", config_name)) 
+    # 1. Definir el objeto Driver de R (drv)
+    drv <- switch(tipo_db,
+      "postgres"  = RPostgres::Postgres(),
+      "mysql"     = RMariaDB::MariaDB(),
+      "mariadb"   = RMariaDB::MariaDB(),
+      "sqlserver" = odbc::odbc()
     )
     
-    con <- dbConnect(
-      driver,
-      host = conf$server,
-      port = conf$port,
-      dbname = conf$database,
-      user = conf$user,
-      password = conf$pwd
-    )
-    return(con)
+    # 2. Construir argumentos dinámicamente
+    args <- list(drv = drv)
+    
+    if (tipo_db == "sqlserver") {
+      # Si el YAML no tiene 'driver', usamos un default común para Windows/Linux.
+      # Esto permite que config.yml quede limpio.
+      driver_sistema <- if (!is.null(conf$driver)) conf$driver else "ODBC Driver 17 for SQL Server"
+      
+      args$Driver   <- driver_sistema
+      args$Server   <- conf$server
+      args$Database <- conf$database
+      args$UID      <- conf$user
+      args$PWD      <- conf$pwd
+      
+      # Puerto opcional (SQL Server usa 1433 por defecto si no se pasa nada)
+      if (!is.null(conf$port)) args$Port <- conf$port
+      
+    } else {
+      # Argumentos estándar DBI (Postgres/MySQL)
+      args$host     <- conf$server
+      args$dbname   <- conf$database
+      args$user     <- conf$user
+      args$password <- conf$pwd
+      if (!is.null(conf$port)) args$port <- conf$port
+    }
+    
+    # 3. Conectar
+    tryCatch({
+      do.call(DBI::dbConnect, args)
+    }, error = function(e) {
+      stop(paste0("Error conectando a '", config_name, "': ", e$message))
+    })
   }
   
-  # 1. Usamos lapply para iterar sobre el vector 'configs'.
-  #    Esto funciona igual de bien para 1 o N elementos.
   conns <- lapply(configs, .crear_una_conexion, file_path = file)
-  
-  # 2. Ponemos los nombres para acceder fácilmente
   names(conns) <- configs
-  
   return(conns)
 }

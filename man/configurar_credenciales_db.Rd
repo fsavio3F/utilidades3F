@@ -2,14 +2,31 @@
 % Please edit documentation in R/configurar_credenciales_db.R
 \name{configurar_credenciales_db}
 \alias{configurar_credenciales_db}
-\title{Configura las credenciales para un servicio de base de datos en el keyring}
+\title{Configura credenciales y conexi\u00f3n para una base de datos}
 \usage{
-configurar_credenciales_db(nombre_servicio)
+configurar_credenciales_db(
+  nombre_servicio,
+  db_type = NULL,
+  server = NULL,
+  database = NULL,
+  port = NULL,
+  file = "config.yml"
+)
 }
 \arguments{
-\item{nombre_servicio}{El nombre del servicio (ej. "SSO_vista")}
+\item{nombre_servicio}{Nombre del servicio (ej. "SICO").}
+
+\item{db_type}{(Opcional) Tipo de BD ("sqlserver", "postgres", "mysql").}
+
+\item{server}{(Opcional) IP o Host.}
+
+\item{database}{(Opcional) Nombre de la base de datos.}
+
+\item{port}{(Opcional) Puerto.}
+
+\item{file}{Ruta al archivo (default: "config.yml").}
 }
 \description{
-Esta función solicita interactivamente al usuario que guarde el servidor,
-el usuario y la contraseña de la BD para un servicio específico.
+Guarda usuario/contrase\u00f1a en el keyring y opcionalmente escribe/reemplaza la configuraci\u00f3n
+en config.yml. Valida que no se guarden credenciales vac\u00edas.
 }

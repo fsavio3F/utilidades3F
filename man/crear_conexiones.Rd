@@ -8,10 +8,9 @@ crear_conexiones(configs, file = "config.yml")
 }
 \arguments{
 \item{configs}{Un vector de caracteres con los nombres de las
-configuraciones a cargar (ej: `"SSO_vista"` o `c("SSO_vista", "otra_db")`).}
+configuraciones a cargar.}
 
-\item{file}{La ruta al archivo de configuración. Por defecto, busca
-un archivo "config.yml" en el directorio de trabajo actual.}
+\item{file}{La ruta al archivo de configuración. Por defecto "config.yml".}
 }
 \value{
 Una lista nombrada, donde cada elemento es un objeto `DBIConnection`.
@@ -19,22 +18,4 @@ Una lista nombrada, donde cada elemento es un objeto `DBIConnection`.
 \description{
 Esta función toma uno o más nombres de configuración y devuelve
 una lista nombrada de conexiones DBI.
-}
-\examples{
-\dontrun{
-  # --- Ejemplo con una sola conexión ---
-  con <- crear_conexiones("produccion")
-  # Se accede así:
-  DBI::dbListTables(con$produccion)
-
-  # --- Ejemplo con múltiples conexiones ---
-  conns <- crear_conexiones(
-    configs = c("produccion", "testing"),
-    file = "D:/Mis cosas/Credenciales/config.yml"
-  )
-  # Se accede de la misma forma:
-  DBI::dbListTables(conns$produccion)
-  DBI::dbListTables(conns$testing)
-}
-
 }

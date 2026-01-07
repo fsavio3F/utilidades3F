@@ -2,7 +2,7 @@
 % Please edit documentation in R/pasar_a_terminos_reales.R
 \name{pasar_a_terminos_reales}
 \alias{pasar_a_terminos_reales}
-\title{Convertir valores nominales a términos reales}
+\title{Convertir valores nominales a t\u00e9rminos reales}
 \usage{
 pasar_a_terminos_reales(df, col_fecha, col_valor, tabla_ipc)
 }
@@ -20,6 +20,6 @@ las columnas \code{indice_tiempo} y \code{valor_ipc}.}
 El dataframe original con una columna nueva agregada (sufijo \code{_tr}) con los valores ajustados.
 }
 \description{
-Ajusta una serie de valores nominales por inflación utilizando una tabla de IPC,
-llevando los valores a precios de un mes base específico.
+Ajusta una serie de valores nominales por inflaci\u00f3n utilizando una tabla de IPC,
+llevando los valores a precios de un mes base espec\u00edfico.
 }

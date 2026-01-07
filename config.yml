@@ -1,0 +1,11 @@
+default:
+  server:
+
+
+catastrito:
+  db_type: "mysql"
+  server: 192.168.11.205
+  database: "catastro_prod"
+  port: 3306
+  user: !expr keyring::key_get(service = "catastrito", username = "db_user")
+  pwd: !expr keyring::key_get(service = "catastrito", username = "db_pwd")
