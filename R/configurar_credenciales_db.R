@@ -134,8 +134,12 @@ configurar_credenciales_db <- function(nombre_servicio,
     )
     
     # hacemos append al archivo
-    texto_a_escribir <- paste0("\n", paste(bloque, collapse = "\n"), "\n")
-    cat(texto_a_escribir, file = file, append = TRUE)
+    con <- file(file, open = "at") # 'at' = append text mode
+    tryCatch({
+      writeLines(c("", bloque), con)
+    }, finally = {
+      close(con)
+    })
     message(sprintf("[OK] Configuración actualizada en %s.", file))
   } else {
     message("\n[Info] Credenciales actualizadas correctamente. No se modific\u00f3 el YAML (faltan par\u00e1metros de conexi\u00f3n).")
