@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 .Rproj
+.yml
 inst/doc
 pruebas/
 /.quarto/
