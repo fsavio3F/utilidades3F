@@ -2,21 +2,25 @@
 % Please edit documentation in R/normalizar_localidades.R
 \name{normalizar_localidades}
 \alias{normalizar_localidades}
-\title{obtener_capa}
+\title{Permite normalizar y corregir los nombres de las localidades en base a la superposición geométrica}
 \usage{
-normalizar_localidades(df = NULL, localidades = localidades_oc)
+normalizar_localidades(df = NULL, localidades = NULL)
 }
 \arguments{
-\item{df}{nombre de la capa a descargar}
+\item{df}{Un objeto `sf` (capa) a normalizar.}
 
-\item{localidades}{description}
+\item{localidades}{Un objeto `sf` con las localidades de referencia. Si es `NULL` (por defecto), 
+se descargará automáticamente la capa "localidades" del servidor.}
 }
 \value{
-devuelve la capa deseada, en caso de no conocer el nombre utilizar la función de inventario_capas
+Devuelve un objeto `sf` con la geometría unida espacialmente.
 }
 \description{
 Permite normalizar y corregir los nombres de las localidades en base a la superposición geométrica
 }
 \examples{
-capa <- obtener_capa(nombre_de_capa = "localidades");
+\dontrun{
+capa <- obtener_capa(nombre_de_capa = "puntos_interes")
+capa_normalizada <- normalizar_localidades(df = capa)
+}
 }

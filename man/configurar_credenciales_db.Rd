@@ -16,7 +16,7 @@ configurar_credenciales_db(
 \arguments{
 \item{nombre_servicio}{Nombre del servicio (ej. "SICO").}
 
-\item{db_type}{(Opcional) Tipo de BD ("sqlserver", "postgres", "mysql").}
+\item{db_type}{(Opcional) Tipo de BD ("sqlserver", "postgres", "mysql", "oracle").}
 
 \item{server}{(Opcional) IP o Host.}
 
