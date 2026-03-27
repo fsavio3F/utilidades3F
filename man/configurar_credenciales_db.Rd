@@ -7,6 +7,7 @@
 configurar_credenciales_db(
   nombre_servicio,
   db_type = NULL,
+  driver = NULL,
   server = NULL,
   database = NULL,
   port = NULL,
@@ -18,9 +19,11 @@ configurar_credenciales_db(
 
 \item{db_type}{(Opcional) Tipo de BD ("sqlserver", "postgres", "mysql", "oracle").}
 
+\item{driver}{(Opcional) Nombre exacto del driver ODBC. Obligatorio si db_type es "oracle" o "sqlserver".}
+
 \item{server}{(Opcional) IP o Host.}
 
-\item{database}{(Opcional) Nombre de la base de datos.}
+\item{database}{(Opcional) Nombre de la base de datos o Service Name.}
 
 \item{port}{(Opcional) Puerto.}
 

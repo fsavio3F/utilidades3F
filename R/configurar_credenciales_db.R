@@ -5,13 +5,15 @@
 #'
 #' @param nombre_servicio Nombre del servicio (ej. "SICO").
 #' @param db_type (Opcional) Tipo de BD ("sqlserver", "postgres", "mysql", "oracle").
+#' @param driver (Opcional) Nombre exacto del driver ODBC. Obligatorio si db_type es "oracle" o "sqlserver".
 #' @param server (Opcional) IP o Host.
-#' @param database (Opcional) Nombre de la base de datos.
+#' @param database (Opcional) Nombre de la base de datos o Service Name.
 #' @param port (Opcional) Puerto.
 #' @param file Ruta al archivo (default: "config.yml").
 #' @export 
 configurar_credenciales_db <- function(nombre_servicio, 
                                        db_type = NULL, 
+                                       driver = NULL,
                                        server = NULL, 
                                        database = NULL, 
                                        port = NULL,
@@ -26,6 +28,11 @@ configurar_credenciales_db <- function(nombre_servicio,
     if (!tolower(db_type) %in% tipos_validos) {
       stop(sprintf("Error: db_type '%s' no es v\u00e1lido.\nOpciones permitidas: %s", 
                    db_type, paste(tipos_validos, collapse = ", ")))
+    }
+    
+    # Validaci\u00f3n estricta (Fail-Fast) para obligar a usar el driver en motores ODBC
+    if (tolower(db_type) %in% c("oracle", "sqlserver") && is.null(driver)) {
+      stop(sprintf("El par\u00e1metro 'driver' es obligatorio para el tipo de base de datos '%s'.", db_type))
     }
   }
   
@@ -69,7 +76,6 @@ configurar_credenciales_db <- function(nombre_servicio,
         return(invisible(NULL))
       }
       
-      # Encontrar el final del bloque actual (pr\u00f3xima clave root o fin de archivo)
       idx_end <- length(lineas)
       if (idx_start < length(lineas)) {
         siguientes_claves <- grep("^[a-zA-Z0-9_-]+\\s*:", lineas[(idx_start + 1):length(lineas)])
@@ -88,7 +94,13 @@ configurar_credenciales_db <- function(nombre_servicio,
     bloque <- c(
       "", 
       paste0(nombre_servicio, ":"),
-      paste0(indent, 'db_type: "', db_type, '"'),
+      paste0(indent, 'db_type: "', db_type, '"')
+    )
+    
+    # Se inyecta el driver si existe
+    if (!is.null(driver)) bloque <- c(bloque, paste0(indent, 'driver: "', driver, '"'))
+    
+    bloque <- c(bloque,
       paste0(indent, 'server: ', server),
       paste0(indent, 'database: "', database, '"')
     )
@@ -100,7 +112,6 @@ configurar_credenciales_db <- function(nombre_servicio,
       paste0(indent, 'pwd: !expr keyring::key_get(service = "', nombre_servicio, '", username = "db_pwd")')
     )
     
-    # Append al archivo
     cat(paste(bloque, collapse = "\n"), "\n", file = file, append = TRUE)
     message(sprintf("[OK] Configuraci\u00f3n actualizada en %s.", file))
     

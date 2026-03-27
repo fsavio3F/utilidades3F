@@ -20,34 +20,35 @@ crear_conexiones <- function(configs, file = "config.yml") {
     conf <- config::get(config = config_name, file = file_path)
     tipo_db <- tolower(conf$db_type)
     
-    # 1. Definir el objeto Driver de R (drv)
     drv <- switch(tipo_db,
       "postgres"  = RPostgres::Postgres(),
       "mysql"     = RMariaDB::MariaDB(),
       "mariadb"   = RMariaDB::MariaDB(),
       "sqlserver" = odbc::odbc(),
       "oracle"    = odbc::odbc(),
-      stop(sprintf("Tipo de base de datos no soportado: %s", tipo_db))
+      stop(sprintf("Tipo de base de datos no soportado en '%s': %s", config_name, tipo_db))
     )
     
-    # 2. Construir argumentos din\u00e1micamente
     args <- list(drv = drv)
     
     if (tipo_db %in% c("sqlserver", "oracle")) {
-      # Validaci\u00f3n y asignaci\u00f3n de driver ODBC
+      
+      # Validaci\u00f3n estricta: No hay default para Oracle.
       if (is.null(conf$driver)) {
-        driver_sistema <- switch(tipo_db,
-          "sqlserver" = "ODBC Driver 17 for SQL Server",
-          "oracle"    = "Oracle in instantclient_19_8" # Ajustar a la versi\u00f3n de tu SO
-        )
-        warning(sprintf("Driver no especificado en %s. Usando default: %s", config_name, driver_sistema))
+        if (tipo_db == "oracle") {
+          stop(sprintf("Error en '%s': El par\u00e1metro 'driver' es obligatorio en el YAML para conexiones Oracle.", config_name))
+        } else {
+          # Mantenemos el fallback para SQL Server solo como conveniencia heredada, avisando al usuario.
+          driver_sistema <- "ODBC Driver 17 for SQL Server"
+          warning(sprintf("Driver no especificado en %s. Usando default: %s", config_name, driver_sistema))
+          args$Driver <- driver_sistema
+        }
       } else {
-        driver_sistema <- conf$driver
+        args$Driver <- conf$driver
       }
       
-      args$Driver <- driver_sistema
-      args$UID    <- conf$user
-      args$PWD    <- conf$pwd
+      args$UID <- conf$user
+      args$PWD <- conf$pwd
       
       if (tipo_db == "sqlserver") {
         args$Server   <- conf$server
@@ -55,13 +56,13 @@ crear_conexiones <- function(configs, file = "config.yml") {
         if (!is.null(conf$port)) args$Port <- conf$port
         
       } else if (tipo_db == "oracle") {
-        # Oracle ODBC usa sintaxis EZConnect en el par\u00e1metro DBQ
+        # Sintaxis EZConnect requerida por el driver ODBC de Oracle
         puerto <- if (!is.null(conf$port)) conf$port else "1521"
         args$DBQ <- paste0(conf$server, ":", puerto, "/", conf$database)
       }
       
     } else {
-      # Argumentos est\u00e1ndar DBI (Postgres/MySQL)
+      # Motores nativos (Postgres/MySQL)
       args$host     <- conf$server
       args$dbname   <- conf$database
       args$user     <- conf$user
@@ -69,7 +70,6 @@ crear_conexiones <- function(configs, file = "config.yml") {
       if (!is.null(conf$port)) args$port <- conf$port
     }
     
-    # 3. Conectar
     tryCatch({
       do.call(DBI::dbConnect, args)
     }, error = function(e) {
