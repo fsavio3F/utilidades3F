@@ -23,5 +23,11 @@ ver_tabla <- function(x, digits = NULL, ...) {
     })
   }
   
-  utils::View(x_fmt, ...)
+  .mostrar_tabla(x_fmt, ...)
+}
+
+# Wrapper delgado sobre utils::View: permite mockearlo en los tests sin
+# tocar el namespace de utils (ver testthat::local_mocked_bindings).
+.mostrar_tabla <- function(x, ...) {
+  utils::View(x, ...)
 }

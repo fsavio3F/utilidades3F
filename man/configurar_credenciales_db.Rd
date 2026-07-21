@@ -8,6 +8,7 @@ configurar_credenciales_db(
   nombre_servicio,
   db_type = NULL,
   driver = NULL,
+  driver_type = NULL,
   server = NULL,
   database = NULL,
   port = NULL,
@@ -19,7 +20,13 @@ configurar_credenciales_db(
 
 \item{db_type}{(Opcional) Tipo de BD ("sqlserver", "postgres", "mysql", "oracle").}
 
-\item{driver}{(Opcional) Nombre exacto del driver ODBC. Obligatorio si db_type es "oracle" o "sqlserver".}
+\item{driver}{(Opcional) Nombre exacto del driver ODBC. Obligatorio si db_type es
+"sqlserver", o si db_type es "oracle" con driver_type = "odbc".}
+
+\item{driver_type}{(Opcional) Para Oracle: "jdbc" (usa RJDBC descargando el driver
+oficial de Oracle a una cach\u00e9 local, sin necesidad de instalar nada m\u00e1s all\u00e1 de una
+JVM) u "odbc" (requiere un driver ODBC de Oracle ya instalado en el sistema).
+Obligatorio si db_type es "oracle".}
 
 \item{server}{(Opcional) IP o Host.}
 

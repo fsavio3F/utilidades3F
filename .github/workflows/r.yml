@@ -19,10 +19,12 @@ permissions:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        r-version: ['4.5.1']
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        r-version: ['4.5.1', 'release', 'oldrel-1']
 
     steps:
       - uses: actions/checkout@v4
@@ -30,11 +32,15 @@ jobs:
         uses: r-lib/actions/setup-r@f57f1301a053485946083d7a45022b278929a78a
         with:
           r-version: ${{ matrix.r-version }}
+      # Reemplaza el install.packages()/remotes::install_deps() manual: además de
+      # las dependencias de R, esta acción instala los requisitos de sistema por SO
+      # (GDAL/GEOS/PROJ para sf, unixODBC para odbc, JDK para rJava/RJDBC, etc.),
+      # necesarios para que la instalación funcione en ubuntu-latest/macos-latest
+      # y no solo en windows-latest.
       - name: Install dependencies
-        run: |
-          install.packages(c("remotes", "rcmdcheck"))
-          remotes::install_deps(dependencies = TRUE)
-        shell: Rscript {0}
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
       - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
         shell: Rscript {0}
