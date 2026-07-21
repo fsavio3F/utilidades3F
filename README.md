@@ -12,11 +12,11 @@
 2.  [Funciones disponibles](#funciones-disponibles)
 3.  [Requisitos](#requisitos)
 
-# **Objetivo** {#objetivo}
+# **Objetivo**
 
 El paquete `utilidades3F` busca centralizar en un solo lugar un conjunto de funciones que usamos frecuentemente en el Departamento de Datos de la Municipalidad de Tres de Febrero.
 
-# **Funciones disponibles** {#funciones-disponibles}
+# **Funciones disponibles**
 
 ### Autenticación y descarga desde Geoportal 3F
 
@@ -41,7 +41,7 @@ El paquete `utilidades3F` busca centralizar en un solo lugar un conjunto de func
     -   Generar una funcion que contenga las rutas relativas para facilitar la lectura y escritura de archivos.
 -   **actualizar_utilidades3F()**: Reinstala el paquete desde GitHub. Se puede especificar una rama (por defecto: `estable`).
 
-# **Requisitos** {#requisitos}
+# **Requisitos**
 
 Para instalar el paquete `utilidades3F` es necesario tener la librería `devtools`:
 

@@ -1,14 +1,14 @@
-#' Configura credenciales y conexi\u00f3n para una base de datos
+#' Configura credenciales y conexión para una base de datos
 #'
-#' Guarda usuario/contrase\u00f1a en el keyring y opcionalmente escribe/reemplaza la configuraci\u00f3n
-#' en config.yml. Valida que no se guarden credenciales vac\u00edas.
+#' Guarda usuario/contraseña en el keyring y opcionalmente escribe/reemplaza la configuración
+#' en config.yml. Valida que no se guarden credenciales vacías.
 #'
 #' @param nombre_servicio Nombre del servicio (ej. "SICO").
 #' @param db_type (Opcional) Tipo de BD ("sqlserver", "postgres", "mysql", "oracle").
 #' @param driver (Opcional) Nombre exacto del driver ODBC. Obligatorio si db_type es
 #'   "sqlserver", o si db_type es "oracle" con driver_type = "odbc".
 #' @param driver_type (Opcional) Para Oracle: "jdbc" (usa RJDBC descargando el driver
-#'   oficial de Oracle a una cach\u00e9 local, sin necesidad de instalar nada m\u00e1s all\u00e1 de una
+#'   oficial de Oracle a una caché local, sin necesidad de instalar nada más allá de una
 #'   JVM) u "odbc" (requiere un driver ODBC de Oracle ya instalado en el sistema).
 #'   Obligatorio si db_type es "oracle".
 #' @param server (Opcional) IP o Host.
@@ -38,14 +38,14 @@ configurar_credenciales_db <- function(nombre_servicio,
     }
 
     if (tolower(db_type) == "sqlserver") {
-      # Validaci\u00f3n estricta (Fail-Fast) para obligar a usar el driver ODBC
+      # Validación estricta (Fail-Fast) para obligar a usar el driver ODBC
       if (is.null(driver)) {
         stop(sprintf("El par\u00e1metro 'driver' es obligatorio para el tipo de base de datos '%s'.", db_type))
       }
     }
 
     if (tolower(db_type) == "oracle") {
-      # Sin default: hay que elegir expl\u00edcitamente el mecanismo de conexi\u00f3n.
+      # Sin default: hay que elegir explícitamente el mecanismo de conexión.
       if (is.null(driver_type) || !tolower(driver_type) %in% c("jdbc", "odbc")) {
         stop("El par\u00e1metro 'driver_type' es obligatorio para Oracle y debe ser 'jdbc' u 'odbc'.")
       }
@@ -76,7 +76,7 @@ configurar_credenciales_db <- function(nombre_servicio,
 
   if (!credenciales_ok) return(invisible(NULL))
 
-  # GESTI\u00d3N DE YAML
+  # GESTIÓN DE YAML
   if (!is.null(db_type) && !is.null(server) && !is.null(database)) {
 
     if (!file.exists(file)) {
@@ -117,16 +117,16 @@ configurar_credenciales_db <- function(nombre_servicio,
 }
 
 # Stubs para poder mockear funciones base en los tests (ver
-# testthat::local_mocked_bindings: para mockear una funci\u00f3n base hace falta
+# testthat::local_mocked_bindings: para mockear una función base hace falta
 # tener ya un binding con ese nombre en el namespace del paquete). No cambia
-# el comportamiento real: al llamarla, R busca el binding m\u00e1s cercano que
-# sea funci\u00f3n y salta los que no lo son, as\u00ed que en uso normal esto sigue
+# el comportamiento real: al llamarla, R busca el binding más cercano que
+# sea función y salta los que no lo son, así que en uso normal esto sigue
 # resolviendo a base::interactive/readline.
 interactive <- NULL
 readline <- NULL
 
 # Arma la lista (R, no texto) con los datos de un servicio para el YAML de
-# configuraci\u00f3n. user/pwd quedan marcados como "verbatim_expr" para que
+# configuración. user/pwd quedan marcados como "verbatim_expr" para que
 # .escribir_config() los emita como tags `!expr` sin comillas, que es lo que
 # config::get() necesita para evaluarlos en vez de tratarlos como texto.
 .construir_bloque_servicio <- function(nombre_servicio, db_type, driver, driver_type, server, database, port) {
@@ -153,7 +153,7 @@ readline <- NULL
 }
 
 # Lee config.yml preservando las etiquetas `!expr` como texto crudo (no las
-# eval\u00faa), para poder reescribir el archivo sin ejecutar el c\u00f3digo que
+# evalúa), para poder reescribir el archivo sin ejecutar el código que
 # contienen.
 .leer_config_bruto <- function(path) {
   yaml::yaml.load_file(

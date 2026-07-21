@@ -1,16 +1,16 @@
-#' Configurar estructura y exportar funci\u00f3n de guardado
+#' Configurar estructura y exportar función de guardado
 #'
-#' Crea directorios e "inyecta" la funci\u00f3n de guardado directamente en el entorno
+#' Crea directorios e "inyecta" la función de guardado directamente en el entorno
 #' de trabajo para no tener que asignarla manualmente.
 #'
 #' @param version String. Identificador (ej. "20251229").
 #' @param categorias Vector. Carpetas del proyecto.
 #' @param versionar Vector. Carpetas que llevan subcarpeta de fecha.
-#' @param ruta_base String. Ruta ra\u00edz.
-#' @param nombre_funcion String o NULL. Nombre con el que se crear\u00e1 la funci\u00f3n en el entorno global.
-#'        Si es NULL, la funci\u00f3n solo retorna el closure y no crea nada en el entorno.
+#' @param ruta_base String. Ruta raíz.
+#' @param nombre_funcion String o NULL. Nombre con el que se creará la función en el entorno global.
+#'        Si es NULL, la función solo retorna el closure y no crea nada en el entorno.
 #'
-#' @return Invisible. Retorna la funci\u00f3n constructora (closure) silenciosamente.
+#' @return Invisible. Retorna la función constructora (closure) silenciosamente.
 #' @export
 configurar_proyecto <- function(
     version = format(Sys.Date(), "%Y%m%d"),
@@ -20,7 +20,7 @@ configurar_proyecto <- function(
     nombre_funcion = "dir_guardado" 
 ) {
   
-  # 1. Crear estructura f\u00edsica
+  # 1. Crear estructura física
   if (!is.null(versionar) && !all(versionar %in% categorias)) {
     warning("[!] Atenci\u00f3n: Hay carpetas en 'versionar' que no est\u00e1n en 'categorias'.")
   }

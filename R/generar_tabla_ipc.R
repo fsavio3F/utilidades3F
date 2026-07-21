@@ -1,13 +1,13 @@
 #' Generar tabla de factores de ajuste IPC
 #'
-#' Descarga la serie hist\u00f3rica del IPC (Nivel General Nacional) desde el INDEC,
-#' completa los meses faltantes hasta la actualidad proyectando el \u00faltimo valor
+#' Descarga la serie histórica del IPC (Nivel General Nacional) desde el INDEC,
+#' completa los meses faltantes hasta la actualidad proyectando el último valor
 #' y calcula los coeficientes de ajuste respecto a un mes base.
 #'
-#' @param mes_base Car\u00e1cter con formato "YYYY-MM" o el string "ult_disponible".
-#'   Indica el mes en el que el coeficiente ser\u00e1 1. Si es \code{NULL}, devuelve la serie cruda.
+#' @param mes_base Carácter con formato "YYYY-MM" o el string "ult_disponible".
+#'   Indica el mes en el que el coeficiente será 1. Si es \code{NULL}, devuelve la serie cruda.
 #'
-#' @return Un data.frame con columnas \code{indice_tiempo} (Date) y \code{valor_ipc} (num\u00e9rico).
+#' @return Un data.frame con columnas \code{indice_tiempo} (Date) y \code{valor_ipc} (numérico).
 #' @export
 #' @importFrom dplyr filter mutate select %>%
 #' @importFrom lubridate ymd %m+% floor_date as_date

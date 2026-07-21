@@ -12,13 +12,13 @@ obtener_inventario(
 )
 }
 \arguments{
-\item{usar_autenticacion}{L\u00f3gico. Si TRUE, intenta cargar el token guardado del usuario para mostrar capas privadas.}
+\item{usar_autenticacion}{Lógico. Si TRUE, intenta cargar el token guardado del usuario para mostrar capas privadas.}
 
-\item{limpiar_prefijo}{L\u00f3gico. Si TRUE, remueve el prefijo "geonode:" de los nombres de capa.}
+\item{limpiar_prefijo}{Lógico. Si TRUE, remueve el prefijo "geonode:" de los nombres de capa.}
 
-\item{ignorar_SSL}{L\u00f3gico. Si TRUE, desactiva la verificaci\u00f3n SSL (solo usar en entornos de desarrollo o servidores internos).}
+\item{ignorar_SSL}{Lógico. Si TRUE, desactiva la verificación SSL (solo usar en entornos de desarrollo o servidores internos).}
 
-\item{.interno}{No tocar. Usado internamente para evitar recursi\u00f3n infinita.}
+\item{.interno}{No tocar. Usado internamente para evitar recursión infinita.}
 }
 \value{
 Un vector con los nombres de las capas disponibles

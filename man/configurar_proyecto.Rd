@@ -2,7 +2,7 @@
 % Please edit documentation in R/configurar_proyecto.R
 \name{configurar_proyecto}
 \alias{configurar_proyecto}
-\title{Configurar estructura y exportar funci\u00f3n de guardado}
+\title{Configurar estructura y exportar función de guardado}
 \usage{
 configurar_proyecto(
   version = format(Sys.Date(), "\%Y\%m\%d"),
@@ -19,15 +19,15 @@ configurar_proyecto(
 
 \item{versionar}{Vector. Carpetas que llevan subcarpeta de fecha.}
 
-\item{ruta_base}{String. Ruta ra\u00edz.}
+\item{ruta_base}{String. Ruta raíz.}
 
-\item{nombre_funcion}{String o NULL. Nombre con el que se crear\u00e1 la funci\u00f3n en el entorno global.
-Si es NULL, la funci\u00f3n solo retorna el closure y no crea nada en el entorno.}
+\item{nombre_funcion}{String o NULL. Nombre con el que se creará la función en el entorno global.
+Si es NULL, la función solo retorna el closure y no crea nada en el entorno.}
 }
 \value{
-Invisible. Retorna la funci\u00f3n constructora (closure) silenciosamente.
+Invisible. Retorna la función constructora (closure) silenciosamente.
 }
 \description{
-Crea directorios e "inyecta" la funci\u00f3n de guardado directamente en el entorno
+Crea directorios e "inyecta" la función de guardado directamente en el entorno
 de trabajo para no tener que asignarla manualmente.
 }

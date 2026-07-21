@@ -2,7 +2,7 @@
 % Please edit documentation in R/configurar_credenciales_db.R
 \name{configurar_credenciales_db}
 \alias{configurar_credenciales_db}
-\title{Configura credenciales y conexi\u00f3n para una base de datos}
+\title{Configura credenciales y conexión para una base de datos}
 \usage{
 configurar_credenciales_db(
   nombre_servicio,
@@ -24,7 +24,7 @@ configurar_credenciales_db(
 "sqlserver", o si db_type es "oracle" con driver_type = "odbc".}
 
 \item{driver_type}{(Opcional) Para Oracle: "jdbc" (usa RJDBC descargando el driver
-oficial de Oracle a una cach\u00e9 local, sin necesidad de instalar nada m\u00e1s all\u00e1 de una
+oficial de Oracle a una caché local, sin necesidad de instalar nada más allá de una
 JVM) u "odbc" (requiere un driver ODBC de Oracle ya instalado en el sistema).
 Obligatorio si db_type es "oracle".}
 
@@ -37,6 +37,6 @@ Obligatorio si db_type es "oracle".}
 \item{file}{Ruta al archivo (default: "config.yml").}
 }
 \description{
-Guarda usuario/contrase\u00f1a en el keyring y opcionalmente escribe/reemplaza la configuraci\u00f3n
-en config.yml. Valida que no se guarden credenciales vac\u00edas.
+Guarda usuario/contraseña en el keyring y opcionalmente escribe/reemplaza la configuración
+en config.yml. Valida que no se guarden credenciales vacías.
 }

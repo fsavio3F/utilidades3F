@@ -1,7 +1,7 @@
-#' Convertir valores nominales a t\u00e9rminos reales
+#' Convertir valores nominales a términos reales
 #'
-#' Ajusta una serie de valores nominales por inflaci\u00f3n utilizando una tabla de IPC,
-#' llevando los valores a precios de un mes base espec\u00edfico.
+#' Ajusta una serie de valores nominales por inflación utilizando una tabla de IPC,
+#' llevando los valores a precios de un mes base específico.
 #'
 #' @param df Dataframe que contiene las series a convertir.
 #' @param col_fecha String. Nombre de la columna de fecha (acepta objetos Date o strings "YYYY-MM").
@@ -17,12 +17,12 @@
 #' @importFrom rlang .data
 pasar_a_terminos_reales <- function(df, col_fecha, col_valor, tabla_ipc) {
 
-  # Validaci\u00f3n b\u00e1sica de input
+  # Validación básica de input
   if (!all(c("indice_tiempo", "valor_ipc") %in% names(tabla_ipc))) {
     stop("La tabla_ipc no tiene el formato esperado (requiere 'indice_tiempo' y 'valor_ipc').")
   }
 
-  # 1. Estandarizaci\u00f3n de tipos y chequeo de NAs
+  # 1. Estandarización de tipos y chequeo de NAs
   na_ini_fecha <- sum(is.na(df[[col_fecha]]))
   na_ini_valor <- sum(is.na(df[[col_valor]]))
 
@@ -47,7 +47,7 @@ pasar_a_terminos_reales <- function(df, col_fecha, col_valor, tabla_ipc) {
 
   if (length(mes_base) == 0) warning("No se detect\u00f3 un mes base con valor_ipc == 1 en la tabla provista.")
 
-  # 3. Normalizaci\u00f3n de fechas para el join
+  # 3. Normalización de fechas para el join
   fechas_temp <- df[[col_fecha]]
   es_formato_ym <- stringr::str_detect(fechas_temp, "^\\d{4}-\\d{2}$")
   es_formato_ym[is.na(es_formato_ym)] <- FALSE
@@ -56,7 +56,7 @@ pasar_a_terminos_reales <- function(df, col_fecha, col_valor, tabla_ipc) {
 
   df$aux_fecha_join <- lubridate::floor_date(lubridate::as_date(fechas_temp), "month")
 
-  # 4. Join y C\u00e1lculo
+  # 4. Join y Cálculo
   df <- dplyr::left_join(df, tabla_ipc, by = c("aux_fecha_join" = "indice_tiempo"))
 
   sufijo <- "_tr"

@@ -2,14 +2,14 @@
 #'
 #' Lista las capas disponibles en el geoportal.
 #'
-#' @param usar_autenticacion L\u00f3gico. Si TRUE, intenta cargar el token guardado del usuario para mostrar capas privadas.
-#' @param limpiar_prefijo L\u00f3gico. Si TRUE, remueve el prefijo "geonode:" de los nombres de capa.
-#' @param ignorar_SSL L\u00f3gico. Si TRUE, desactiva la verificaci\u00f3n SSL (solo usar en entornos de desarrollo o servidores internos).
-#' @param .interno No tocar. Usado internamente para evitar recursi\u00f3n infinita.
+#' @param usar_autenticacion Lógico. Si TRUE, intenta cargar el token guardado del usuario para mostrar capas privadas.
+#' @param limpiar_prefijo Lógico. Si TRUE, remueve el prefijo "geonode:" de los nombres de capa.
+#' @param ignorar_SSL Lógico. Si TRUE, desactiva la verificación SSL (solo usar en entornos de desarrollo o servidores internos).
+#' @param .interno No tocar. Usado internamente para evitar recursión infinita.
 #' @return Un vector con los nombres de las capas disponibles
 #' @export
 obtener_inventario <- function(usar_autenticacion = FALSE, limpiar_prefijo = TRUE, ignorar_SSL = FALSE, .interno = FALSE) {
-  # --- Rama sin autenticaci\u00f3n (usa callr) ---
+  # --- Rama sin autenticación (usa callr) ---
   if (!usar_autenticacion && !.interno) {
     return(callr::r(
       function(limpiar_prefijo, ignorar_SSL) {

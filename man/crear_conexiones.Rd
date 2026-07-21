@@ -2,7 +2,7 @@
 % Please edit documentation in R/crear_conexiones.R
 \name{crear_conexiones}
 \alias{crear_conexiones}
-\title{Crea una o m\u00e1s conexiones a bases de datos}
+\title{Crea una o más conexiones a bases de datos}
 \usage{
 crear_conexiones(configs, file = "config.yml")
 }
@@ -10,12 +10,12 @@ crear_conexiones(configs, file = "config.yml")
 \item{configs}{Un vector de caracteres con los nombres de las
 configuraciones a cargar.}
 
-\item{file}{La ruta al archivo de configuraci\u00f3n. Por defecto "config.yml".}
+\item{file}{La ruta al archivo de configuración. Por defecto "config.yml".}
 }
 \value{
 Una lista nombrada, donde cada elemento es un objeto `DBIConnection`.
 }
 \description{
-Esta funci\u00f3n toma uno o m\u00e1s nombres de configuraci\u00f3n y devuelve
+Esta función toma uno o más nombres de configuración y devuelve
 una lista nombrada de conexiones DBI.
 }

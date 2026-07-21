@@ -1,11 +1,11 @@
-#' Crea una o m\u00e1s conexiones a bases de datos
+#' Crea una o más conexiones a bases de datos
 #'
-#' Esta funci\u00f3n toma uno o m\u00e1s nombres de configuraci\u00f3n y devuelve
+#' Esta función toma uno o más nombres de configuración y devuelve
 #' una lista nombrada de conexiones DBI.
 #'
 #' @param configs Un vector de caracteres con los nombres de las
 #'   configuraciones a cargar.
-#' @param file La ruta al archivo de configuraci\u00f3n. Por defecto "config.yml".
+#' @param file La ruta al archivo de configuración. Por defecto "config.yml".
 #'
 #' @return Una lista nombrada, donde cada elemento es un objeto `DBIConnection`.
 #' @export
@@ -40,8 +40,8 @@ crear_conexiones <- function(configs, file = "config.yml") {
   DBI::dbConnect(...)
 }
 
-# Arma la lista de argumentos para dbConnect seg\u00fan el motor de base de datos.
-# No llama a config::get() ni abre conexi\u00f3n real, as\u00ed que cada rama se
+# Arma la lista de argumentos para dbConnect según el motor de base de datos.
+# No llama a config::get() ni abre conexión real, así que cada rama se
 # puede testear de forma pura.
 .construir_args_conexion <- function(conf, tipo_db, config_name = tipo_db) {
 
@@ -61,7 +61,7 @@ crear_conexiones <- function(configs, file = "config.yml") {
 
   if (tipo_db == "sqlserver") {
 
-    # Validaci\u00f3n estricta: No hay default para Oracle (ver .construir_args_oracle).
+    # Validación estricta: No hay default para Oracle (ver .construir_args_oracle).
     if (is.null(conf$driver)) {
       # Mantenemos el fallback para SQL Server solo como conveniencia heredada, avisando al usuario.
       driver_sistema <- "ODBC Driver 17 for SQL Server"
@@ -89,13 +89,13 @@ crear_conexiones <- function(configs, file = "config.yml") {
   args
 }
 
-# Oracle admite dos mecanismos de conexi\u00f3n, elegidos expl\u00edcitamente por
-# `driver_type` en el YAML (sin default: ver validaci\u00f3n fail-fast abajo):
-# - "jdbc": v\u00eda RJDBC, descargando y cacheando el driver oficial de Oracle
+# Oracle admite dos mecanismos de conexión, elegidos explícitamente por
+# `driver_type` en el YAML (sin default: ver validación fail-fast abajo):
+# - "jdbc": vía RJDBC, descargando y cacheando el driver oficial de Oracle
 #   (ojdbc8.jar, publicado en Maven Central) en vez de exigir copiarlo a mano
 #   en cada proyecto. Requiere una JVM instalada (dependencia de rJava/RJDBC).
-# - "odbc": v\u00eda el paquete odbc, contra un driver ODBC de Oracle ya
-#   instalado y registrado en el sistema operativo (comportamiento hist\u00f3rico).
+# - "odbc": vía el paquete odbc, contra un driver ODBC de Oracle ya
+#   instalado y registrado en el sistema operativo (comportamiento histórico).
 .construir_args_oracle <- function(conf, config_name) {
   driver_type <- if (is.null(conf$driver_type)) "" else tolower(conf$driver_type)
 
@@ -116,8 +116,8 @@ crear_conexiones <- function(configs, file = "config.yml") {
 
   # driver_type == "odbc"
   # Ojo: usamos [[..., exact = TRUE]] porque `conf$driver` hace partial
-  # matching y, al existir tambi\u00e9n `driver_type` en la misma lista, resuelve
-  # (mal) al valor de `driver_type` cuando `driver` no est\u00e1 presente.
+  # matching y, al existir también `driver_type` en la misma lista, resuelve
+  # (mal) al valor de `driver_type` cuando `driver` no está presente.
   driver_odbc <- conf[["driver", exact = TRUE]]
   if (is.null(driver_odbc)) {
     stop(sprintf(
@@ -136,8 +136,8 @@ crear_conexiones <- function(configs, file = "config.yml") {
   )
 }
 
-# Descarga (una \u00fanica vez por m\u00e1quina) y cachea el driver JDBC oficial de
-# Oracle en la carpeta de cach\u00e9 de usuario de R, para no depender de copiar
+# Descarga (una única vez por máquina) y cachea el driver JDBC oficial de
+# Oracle en la carpeta de caché de usuario de R, para no depender de copiar
 # el .jar a mano en cada proyecto. Oracle publica ojdbc8 en Maven Central con
 # licencia de uso libre desde hace varias versiones (sin click-through OTN).
 .obtener_jar_oracle_jdbc <- function(version = "23.8.0.25.04") {
